@@ -1,0 +1,32 @@
+/* Global styles */
+.tab-image {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    border: 1px solid #ccc;
+  }
+  
+  .product-item {
+    min-height: 300px;
+    position: relative;
+  }
+  
+  figure {
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  html, body { height: 100%; }
+  body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+  
+  /* Tailwind layers */
+  @tailwind base;
+  @tailwind components;
+  @tailwind utilities;
+  
+  /* External imports */
+  @import '@angular/material/prebuilt-themes/indigo-pink.css';
+  @import 'animate.css';
+  

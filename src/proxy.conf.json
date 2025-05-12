@@ -1,0 +1,12 @@
+{
+    "/images": {
+      "target": "https://res.cloudinary.com",
+      "secure": true,
+      "changeOrigin": true,
+      "pathRewrite": {
+        "^/images": ""
+      },
+      "logLevel": "debug"
+    }
+    
+  }

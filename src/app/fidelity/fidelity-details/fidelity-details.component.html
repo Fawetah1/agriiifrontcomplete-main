@@ -1,0 +1,48 @@
+<div class="container-fluid mt-5">
+    <div class="card shadow-sm border-0 rounded-3">
+      <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+        <h2 class="card-title mb-0">Détails du Programme de Fidélité</h2>
+      </div>
+      <div class="card-body">
+        <div *ngIf="fidelity; else loading">
+          <!-- Nom et Prénom -->
+          <div class="mb-4">
+            <h3 class="text-primary">{{ fidelity.user?.nom }} {{ fidelity.user?.prenom }}</h3>
+            <p class="card-text text-muted"><strong>Email:</strong> {{ fidelity.user?.email }}</p>
+            <p class="card-text text-muted"><strong>Points:</strong> {{ fidelity.points }}</p>
+            <p class="card-text text-muted"><strong>Niveau:</strong> {{ fidelity.niveau }}</p>
+          </div>
+          
+          <!-- Boutons d'actions -->
+          <div class="d-flex justify-content-start gap-3">
+            <a [routerLink]="['/modify', fidelity.user?.id]" class="btn btn-outline-primary btn-lg">
+              <i class="bi bi-pencil-square"></i> Modifier
+            </a>
+            <button (click)="confirmDelete(fidelity.id)" class="btn btn-outline-danger btn-lg">
+              <i class="bi bi-trash"></i> Supprimer
+            </button>
+            <a [routerLink]="['/history', fidelity.user?.id]" class="btn btn-outline-info btn-lg">
+              <i class="bi bi-clock-history"></i> Voir Historique
+            </a>
+          </div>
+        </div>
+  
+        <!-- Chargement -->
+        <ng-template #loading>
+          <div class="text-center">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Chargement...</span>
+            </div>
+          </div>
+        </ng-template>
+      </div>
+  
+      <!-- Footer avec le bouton Retour -->
+      <div class="card-footer text-center">
+        <a [routerLink]="['/fidelities']" class="btn btn-outline-secondary btn-lg">
+          <i class="bi bi-arrow-left"></i> Retour
+        </a>
+      </div>
+    </div>
+  </div>
+  

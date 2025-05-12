@@ -1,0 +1,30 @@
+<div class="form-container">
+    <h2>Ajouter un Utilisateur</h2>
+    <form (ngSubmit)="onSubmit()">
+      <label>Nom:</label>
+      <input type="text" [(ngModel)]="user.nom" name="nom" required />
+  
+      <label>Prénom:</label>
+      <input type="text" [(ngModel)]="user.prenom" name="prenom" required />
+  
+      <label>Email:</label>
+      <input type="email" [(ngModel)]="user.email" name="email" required />
+  
+      <label>Mot de passe:</label>
+      <input type="password" [(ngModel)]="user.motDePasse" name="motDePasse" required />
+  
+      <label>Téléphone:</label>
+      <input type="text" [(ngModel)]="user.numeroDeTelephone" name="numeroDeTelephone" required />
+  
+      <label>Rôle:</label>
+      <select [(ngModel)]="user.role" name="role">
+        <option value="admin">Admin</option>
+        <option value="user">Client</option>
+        <option value="agriculteur">Agriculteur</option>
+        <option value="livreur">Livreur</option>
+      </select>
+  
+      <button type="submit">Créer l'utilisateur</button>
+    </form>
+  </div>
+  

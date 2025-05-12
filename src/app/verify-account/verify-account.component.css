@@ -1,0 +1,50 @@
+.verify-form {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 25px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    font-family: Arial, sans-serif;
+  }
+  
+  .verify-form h2 {
+    text-align: center;
+    color: #2e7d32;
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+  
+  input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+  }
+  
+  .btn-primary {
+    background-color: #2e7d32;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    width: 100%;
+    font-weight: bold;
+  }
+  
+  .message {
+    margin-top: 15px;
+    text-align: center;
+    font-weight: bold;
+  }
+  

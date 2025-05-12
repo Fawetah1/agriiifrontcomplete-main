@@ -1,0 +1,92 @@
+<div class="promotion-add-container max-w-full mx-auto p-6 bg-cover bg-center bg-no-repeat"
+     style="background-image: url('/assets/template/images/bg-promo.jpg'); background-size: cover; height: auto; min-height: 80vh;">
+  <div class="backdrop-blur-sm bg-white/80 p-10 rounded-2xl shadow-2xl max-w-full border-2 border-gray-300">
+    <h2 class="text-4xl font-semibold text-center text-green-800 mb-8 tracking-wide">🎉 Nouvelle Promotion</h2>
+
+    <!-- Feedback messages -->
+    <div *ngIf="successMessage" class="animate-fade-in bg-green-100 text-green-800 border border-green-300 p-4 rounded-lg mb-6 text-center">
+      ✅ {{ successMessage }}
+    </div>
+    <div *ngIf="errorMessage" class="animate-fade-in bg-red-100 text-red-800 border border-red-300 p-4 rounded-lg mb-6 text-center">
+      ❌ {{ errorMessage }}
+    </div>
+
+    <form (ngSubmit)="addPromotion()" class="space-y-6">
+      <!-- Nom -->
+      <div>
+        <label for="promotionName" class="form-label text-lg font-medium text-gray-700">Nom de la Promotion</label>
+        <input type="text" id="promotionName" name="promotionName" [(ngModel)]="newPromotion.nom"
+               class="form-input text-xl w-full py-3 px-6 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 transition"
+               placeholder="Ex: Promo d'Automne" required>
+      </div>
+
+      <!-- Pourcentage -->
+      <div>
+        <label for="discountPercentage" class="form-label text-lg font-medium text-gray-700">Pourcentage de Réduction (%)</label>
+        <input type="number" id="discountPercentage" name="discountPercentage" [(ngModel)]="newPromotion.pourcentageReduction"
+               class="form-input text-xl w-full py-3 px-6 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 transition"
+               placeholder="Ex: 20" min="0" max="100" required>
+      </div>
+
+      <!-- Dates -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div>
+          <label for="startDate" class="form-label text-lg font-medium text-gray-700">Date de Début</label>
+          <input type="date" id="startDate" name="startDate" [(ngModel)]="startDate"
+                 class="form-input text-xl w-full py-3 px-6 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 transition" required>
+        </div>
+        <div>
+          <label for="endDate" class="form-label text-lg font-medium text-gray-700">Date de Fin</label>
+          <input type="date" id="endDate" name="endDate" [(ngModel)]="endDate"
+                 class="form-input text-xl w-full py-3 px-6 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 transition" required>
+        </div>
+      </div>
+
+      <!-- Condition -->
+      <div>
+        <label for="condition" class="form-label text-lg font-medium text-gray-700">Condition de la Promotion (Optionnel)</label>
+        <input type="text" id="condition" name="condition" [(ngModel)]="newPromotion.conditionPromotion"
+               class="form-input text-xl w-full py-3 px-6 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 transition"
+               placeholder="Ex: Achat minimum de 50 TND">
+      </div>
+
+      <!-- Catégorie -->
+      <div>
+        <label for="category" class="form-label text-lg font-medium text-gray-700">Catégorie</label>
+        <select id="category" name="category" (change)="onCategoryChange($event)"
+                class="form-input text-xl w-full py-3 px-6 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 transition">
+          <option value="">-- Aucune Catégorie --</option>
+          <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+        </select>
+      </div>
+
+      <!-- Produits -->
+      <div>
+        <div class="flex justify-between items-center mb-4">
+          <label class="form-label text-lg font-medium text-gray-700">Produits</label>
+          <button type="button" (click)="loadProductsData()"
+                  class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg transition-colors">
+            🔄 Rafraîchir
+          </button>
+        </div>
+        <select id="products" name="products" multiple (change)="onProductsChange($event)"
+                [disabled]="selectedCategory" class="form-input text-xl w-full py-3 px-6 h-36 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 transition">
+          <option *ngFor="let product of products" [value]="product.nom">
+            {{ product.nom }} ({{ product.prix }} TND)
+          </option>
+        </select>
+        <p class="text-gray-500 text-sm mt-2 italic" *ngIf="selectedCategory">
+          La sélection de produits est désactivée car une catégorie est sélectionnée.
+        </p>
+      </div>
+
+      <!-- Submit -->
+      <div class="text-center">
+        <button type="submit" [disabled]="isLoading"
+                class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-lg transition-all duration-300 transform hover:scale-105">
+          {{ isLoading ? 'Ajout en cours...' : '✅ Ajouter la Promotion' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

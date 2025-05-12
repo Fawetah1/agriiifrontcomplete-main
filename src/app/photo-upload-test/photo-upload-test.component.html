@@ -1,0 +1,13 @@
+<div style="max-width: 400px; margin: 40px auto; text-align: center;">
+    <h3>🧪 Test Upload Photo</h3>
+  
+    <input type="file" (change)="onFileSelected($event)" accept="image/*" />
+    <br /><br />
+  
+    <img *ngIf="previewUrl" [src]="previewUrl" style="width: 150px; border-radius: 50%;" />
+    <br /><br />
+  
+    <button (click)="upload()" [disabled]="!selectedFile">📤 Envoyer</button>
+    <p class="message">{{ message }}</p>
+  </div>
+  

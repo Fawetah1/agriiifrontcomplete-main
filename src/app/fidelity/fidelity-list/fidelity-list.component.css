@@ -1,0 +1,18 @@
+/* fidelity-list.component.css */
+.card {
+    margin-bottom: 20px;
+  }
+  
+  .table th,
+  .table td {
+    vertical-align: middle;
+  }
+  
+  .input-group-lg .form-control {
+    height: calc(2.5rem + 2px);
+  }
+  
+  .btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+  }

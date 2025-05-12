@@ -1,0 +1,83 @@
+<div class="container mt-5">
+  <h2 class="mb-4">Détails de la Facture</h2>
+
+  <div *ngIf="isLoading" class="text-center">
+    <p>Chargement...</p>
+  </div>
+
+  <div *ngIf="!isLoading && factures.length === 0" class="alert alert-warning">
+    Aucune facture trouvée pour cette transaction.
+  </div>
+
+  <div *ngIf="!isLoading && facture">
+    <!-- User Information -->
+    <div class="card mb-4">
+      <div class="card-header">Informations Utilisateur</div>
+      <div class="card-body">
+        <p><strong>Nom:</strong> {{ facture.user?.nom ?? 'N/A' }}</p>
+        <p><strong>Email:</strong> {{ facture.user?.email ?? 'N/A' }}</p>
+        <p><strong>Téléphone:</strong> {{ facture.user?.numeroDeTelephone ?? 'N/A' }}</p>
+      </div>
+    </div>
+
+    <!-- Delivery Information -->
+    <div class="card mb-4">
+      <div class="card-header">Informations de Livraison</div>
+      <div class="card-body">
+        <p><strong>Téléphone:</strong> {{ facture.commande?.telephone ?? 'N/A' }}</p>
+        <p><strong>Gouvernorat:</strong> {{ facture.commande?.gouvernement ?? 'N/A' }}</p>
+        <p><strong>Adresse:</strong> {{ facture.commande?.adresse ?? 'N/A' }}</p>
+      </div>
+    </div>
+
+    <!-- Facture Details -->
+    <div class="card mb-4">
+      <div class="card-header">Détails de la Facture</div>
+      <div class="card-body">
+        <p><strong>Numéro de Facture:</strong> {{ facture.numeroFacture ?? 'N/A' }}</p>
+        <p><strong>Date de Facture:</strong> {{ facture.dateFacture ?? 'N/A' }}</p>
+        <p><strong>Commande ID:</strong> {{ facture.commande?.id ?? 'N/A' }}</p>
+        <p><strong>Statut Commande:</strong> {{ facture.commande?.status ?? 'N/A' }}</p>
+        <p><strong>Montant Total:</strong> TND {{ facture.montantTotal ?? 0 | number:'1.2-2' }}</p>
+      </div>
+    </div>
+
+    <!-- Lignes Facture Table -->
+    <div class="card mb-4">
+      <div class="card-header">Lignes de Facture</div>
+      <div class="card-body">
+        <table class="table table-bordered" *ngIf="facture.lignesFacture && facture.lignesFacture.length > 0">
+          <thead>
+            <tr>
+              <th>Produit</th>
+              <th>Description</th>
+              <th>Quantité</th>
+              <th>Prix Unitaire</th>
+              <th>Total HT</th>
+              <th>TTC</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let ligne of facture.lignesFacture">
+              <td>{{ ligne.produit?.nom ?? 'N/A' }}</td>
+              <td>{{ ligne.produit?.description ?? 'N/A' }}</td>
+              <td>{{ ligne.qte ?? 'N/A' }}</td>
+              <td>{{ ligne.prixUnitaire ?? 0 | number:'1.2-2' }}</td>
+              <td>{{ ligne.total ?? 0 | number:'1.2-2' }}</td>
+              <td>{{ ligne.ttc ?? 0 | number:'1.2-2' }}</td>
+            </tr>
+          </tbody>
+        </table>
+        <div *ngIf="!facture.lignesFacture || facture.lignesFacture.length === 0" class="alert alert-info">
+          Aucune ligne de facture disponible.
+        </div>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="d-flex justify-content-between">
+      <button class="btn btn-secondary" (click)="goBack()">Retour</button>
+      <button class="btn btn-primary" (click)="downloadPDF()">Télécharger PDF</button>
+    </div>
+  </div>
+</div>

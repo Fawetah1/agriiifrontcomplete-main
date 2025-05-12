@@ -1,0 +1,62 @@
+<div class="inscription-form">
+  <h2>Inscription</h2>
+
+  <div class="toggle-row">
+    <label class="switch">
+      <input type="checkbox" (change)="toggleFaceCapture($event)">
+      <span class="slider"></span>
+    </label>
+    <span>{{ useFaceCapture ? 'Use FaceID' : 'Without FaceID' }}</span>
+  </div>
+
+  <form (ngSubmit)="onSubmit()" #inscriptionForm="ngForm">
+    <div class="form-group">
+      <label for="nom">Nom :</label>
+      <input type="text" id="nom" name="nom" [(ngModel)]="user.nom" required>
+    </div>
+
+    <div class="form-group">
+      <label for="prenom">Prénom :</label>
+      <input type="text" id="prenom" name="prenom" [(ngModel)]="user.prenom" required>
+    </div>
+
+    <div class="form-group">
+      <label for="email">Email :</label>
+      <input type="email" id="email" name="email" [(ngModel)]="user.email" required>
+    </div>
+
+    <div class="form-group">
+      <label for="motDePasse">Mot de passe :</label>
+      <input type="password" id="motDePasse" name="motDePasse" [(ngModel)]="user.motDePasse" required minlength="6">
+    </div>
+
+    <div class="form-group">
+      <label for="numeroDeTelephone">Téléphone :</label>
+      <input type="text" id="numeroDeTelephone" name="numeroDeTelephone" [(ngModel)]="user.numeroDeTelephone" required pattern="^[0-9]{8}$">
+    </div>
+
+    <div class="form-group">
+      <label for="role">Rôle :</label>
+      <select id="role" name="role" [(ngModel)]="user.role">
+        <option value="user">Client</option>
+        <option value="agriculteur">Agriculteur</option>
+        <option value="livreur">Livreur</option>
+      </select>
+    </div>
+
+    <div class="form-group" *ngIf="useFaceCapture">
+      <label>Prévisualisation visage :</label><br>
+      <video id="preview" width="100%" height="300" autoplay muted></video>
+      <button type="button" (click)="captureFace()" class="btn-secondary">📸 Capturer visage</button>
+    </div>
+
+    <input type="hidden" name="faceDescriptor" [(ngModel)]="user.faceDescriptor">
+
+    <button type="submit" class="btn-submit" [disabled]="inscriptionForm.invalid">S'inscrire</button>
+  </form>
+
+  <p class="message">{{ message }}</p>
+  <p class="link-message">
+    Déjà un compte ? <a routerLink="/login">Se connecter</a>
+  </p>
+</div>

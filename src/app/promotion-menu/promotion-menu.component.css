@@ -1,0 +1,61 @@
+.menu-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .banner {
+    background-image: url('/assets/template/images/agri-promo-banner.jpg');
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    min-height: 40vh; /* 40% de la hauteur de l’écran */
+    border-radius: 0.5rem;
+    overflow: hidden;
+  }
+  
+  
+  
+  .overlay {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.5rem;
+  }
+  
+  .banner-text {
+    animation: fadeIn 1s ease-in-out;
+  }
+  
+  @keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+  
+  .nav-button {
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .nav-button:hover {
+    background-color: var(--hover-color);
+  }
+  
+  .nav-button.active {
+    font-weight: bold;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  .nav-button i {
+    font-size: 1.2em;
+  }

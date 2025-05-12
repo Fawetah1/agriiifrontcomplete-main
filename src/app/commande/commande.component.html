@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>AgriConnect</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="author" content="">
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="/assets/template/css/vendor.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&family=Open+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #f8fafc;
+        }
+        .main-content {
+            display: flex;
+            gap: 2rem;
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .commandes-section {
+            flex: 3;
+            background: #ffffff;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+        .commandes-section h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1a202c;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        .no-items {
+            text-align: center;
+            color: #718096;
+            font-size: 1.1rem;
+            padding: 2rem;
+            background: #edf2f7;
+            border-radius: 0.75rem;
+        }
+        .commandes-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        .commande-card {
+            border: 1px solid #e2e8f0;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            background: #fafafa;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .commande-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.1);
+        }
+        .commande-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        .commande-id {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #2d3748;
+        }
+        .commande-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: #f7fafc;
+            border-radius: 0.5rem;
+        }
+        .commande-details p {
+            margin: 0;
+            font-size: 0.95rem;
+            color: #4a5568;
+        }
+        .commande-details strong {
+            color: #2d3748;
+        }
+        .view-facture-btn {
+            background: #48bb78;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            border: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        .view-facture-btn:hover {
+            background: #38a169;
+        }
+        .produits-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .produit-item {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            padding: 1rem;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.75rem;
+            transition: box-shadow 0.2s ease;
+        }
+        .produit-item:hover {
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+        .produit-image {
+            position: relative;
+            width: 80px;
+            height: 80px;
+        }
+        .produit-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+        .produit-image img:hover {
+            transform: scale(1.05);
+        }
+        .wishlist-btn-small {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 50%;
+            padding: 0.25rem;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        .wishlist-btn-small:hover {
+            background: #f7fafc;
+        }
+        .wishlist-btn-small .material-icons {
+            font-size: 1.2rem;
+            color: #e53e3e;
+        }
+        .produit-details {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .produit-header {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+        .produit-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin: 0;
+        }
+        .produit-stock {
+            font-size: 0.85rem;
+            color: #48bb78;
+            margin: 0;
+        }
+        .produit-limit {
+            font-size: 0.85rem;
+            color: #e53e3e;
+            margin: 0;
+        }
+        .produit-footer {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .produit-pricing {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .original-price {
+            font-size: 0.9rem;
+            color: #a0aec0;
+            text-decoration: line-through;
+        }
+        .discounted-price {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #2d3748;
+        }
+        .discount-percentage {
+            font-size: 0.85rem;
+            color: #48bb78;
+        }
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .quantity-btn {
+            background: #edf2f7;
+            border: none;
+            padding: 0.25rem 0.75rem;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        .quantity-btn:hover {
+            background: #e2e8f0;
+        }
+        .quantity-input {
+            width: 50px;
+            text-align: center;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            padding: 0.25rem;
+            font-size: 0.9rem;
+        }
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+        .action-btn {
+            background: #3182ce;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            border: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        .action-btn:hover {
+            background: #2b6cb0;
+        }
+        .action-btn:last-child {
+            background: #e53e3e;
+        }
+        .action-btn:last-child:hover {
+            background: #c53030;
+        }
+        .payment-sidebar {
+            flex: 1;
+            background: #ffffff;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 2rem;
+            height: fit-content;
+        }
+        .payment-sidebar h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1a202c;
+            margin-bottom: 1.5rem;
+        }
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 0.95rem;
+            color: #4a5568;
+        }
+        .summary-total {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2d3748;
+        }
+        .continue-btn {
+            width: 100%;
+            background: #38a169;
+            color: white;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            border: none;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        .continue-btn:hover {
+            background: #2f855a;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar content remains unchanged -->
+    <header>
+        <!-- Existing navbar code -->
+        <div class="container-fluid">
+            <div class="row py-3 border-bottom">
+                <div class="col-sm-4 col-lg-2 text-center text-sm-start d-flex gap-3 justify-content-center justify-content-md-start">
+                    <div class="d-flex align-items-center my-3 my-sm-0">
+                        <a href="index.html">
+                            <img src="/assets/template/images/logo.svg" alt="logo" class="img-fluid">
+                        </a>
+                    </div>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
+                        <svg width="24" height="24" viewBox="0 0 24 24"><use xlink:href="#menu"></use></svg>
+                    </button>
+                </div>
+                
+                <div class="col-sm-6 offset-sm-2 offset-md-0 col-lg-4">
+                    <div class="search-bar row bg-light p-2 rounded-4">
+                        <div class="col-md-4 d-none d-md-block">
+                            <select class="form-select border-0 bg-transparent">
+                                <option>All Categories</option>
+                                <option>Groceries</option>
+                                <option>Drinks</option>
+                                <option>Chocolates</option>
+                            </select>
+                        </div>
+                        <div class="col-11 col-md-7">
+                            <form id="search-form" class="text-center" action="index.html" method="post">
+                                <input type="text" class="form-control border-0 bg-transparent" placeholder="Search for more than 20,000 products">
+                            </form>
+                        </div>
+                        <div class="col-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M21.71 20.29L18 16.61A9 9 0 1 0 16.61 18l3.68 3.68a1 1 0 0 0 1.42 0a1 1 0 0 0 0-1.39ZM11 18a7 7 0 1 1 7-7a7 7 0 0 1-7 7Z"/></svg>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <ul class="navbar-nav list-unstyled d-flex flex-row gap-3 gap-lg-5 justify-content-center flex-wrap align-items-center mb-0 fw-bold text-uppercase text-dark">
+                        <li class="nav-item active">
+                            <a href="index.html" class="nav-link">Home</a>
+                        </li>
+                        <li>
+                            <button class="icon-btn wishlist-btn" (click)="navigateToWishlist()">
+                                <span class="material-icons">favorite_border</span>
+                                <span class="notification-badge">{{ getWishlistCount() }}</span>
+                            </button>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle pe-3" role="button" id="pages" data-bs-toggle="dropdown" aria-expanded="false">Pages</a>
+                            <ul class="dropdown-menu border-0 p-3 rounded-0 shadow" aria-labelledby="pages">
+                                <li><a href="index.html" class="dropdown-item">About Us </a></li>
+                                <li><a href="index.html" class="dropdown-item">Shop </a></li>
+                                <li><a href="index.html" class="dropdown-item">Single Product </a></li>
+                                <li><a href="index.html" class="dropdown-item">Cart </a></li>
+                                <li><a href="index.html" class="dropdown-item">Checkout </a></li>
+                                <li><a href="index.html" class="dropdown-item">Blog </a></li>
+                                <li><a href="index.html" class="dropdown-item">Single Post </a></li>
+                                <li><a href="index.html" class="dropdown-item">Styles </a></li>
+                                <li><a href="index.html" class="dropdown-item">Contact </a></li>
+                                <li><a href="index.html" class="dropdown-item">Thank You </a></li>
+                                <li><a href="index.html" class="dropdown-item">My Account </a></li>
+                                <li><a href="index.html" class="dropdown-item">404 Error </a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-sm-8 col-lg-2 d-flex gap-5 align-items-center justify-content-center justify-content-sm-end">
+                    <ul class="d-flex justify-content-end list-unstyled m-0">
+                        <li *ngIf="!isLoggedIn">
+                            <a routerLink="/login" class="p-2 mx-1" title="Connexion">
+                                <svg width="24" height="24"><use xlink:href="#user"></use></svg>
+                            </a>
+                        </li>
+                        <li *ngIf="isLoggedIn" class="position-relative" (click)="toggleProfileMenu()">
+                            <div class="profile-icon-wrapper p-2 mx-1" title="Mon compte">
+                                <img
+                                    
+                                    alt="Profil"
+                                    class="rounded-circle nav-avatar shadow-sm"
+                                    width="48"
+                                    height="48"
+                                    style="object-fit: cover; border: 2px solid #007bff;"
+                                />
+                            </div>
+                            <div *ngIf="showProfileMenu" class="profile-menu-dropdown">
+                                <p class="fw-bold mb-1">{{ currentUser.nom }} {{ currentUser.prenom }}</p>
+                                <p class="text-muted small mb-2">{{ currentUser.email }}</p>
+                                <hr class="my-1" />
+                                <button (click)="onGoToMyAccount()" class="dropdown-btn">⚙️ Modifier mes infos</button>
+                                <button (click)="onLogout()" class="dropdown-btn">⎋ Déconnexion</button>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-sm-8 col-lg-2 d-flex gap-5 align-items-center justify-content-center justify-content-sm-end">
+                    <ul class="d-flex justify-content-end list-unstyled m-0"></ul>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Updated MES COMMANDES Section -->
+    <div class="commandes-section">
+        <h1>MES COMMANDES</h1>
+
+        <div *ngIf="!commandes || commandes.length === 0" class="no-items">
+            <p>Aucune commande trouvée.</p>
+        </div>
+
+        <div *ngIf="commandes && commandes.length > 0" class="commandes-list">
+            <div class="commande-card" *ngFor="let commande of commandes">
+                <div class="commande-header">
+                    <h2 class="commande-id">Commande #{{ commande.id || 'N/A' }}</h2>
+                </div>
+                <div class="commande-details">
+                    <p><strong>Client :</strong> {{ commande.clientNom }}</p>
+                    <p><strong>Date :</strong> {{ commande.dateCreation || 'Non spécifiée' }}</p>
+                    <p><strong>Total :</strong> {{ commande.total || 0 | currency:'TND':'symbol' }}</p>
+                    <p><strong>Statut :</strong> {{ commande.status }}</p>
+                    <button class="view-facture-btn" (click)="viewFacture(commande)" *ngIf="commande.status === 'PAID'">
+                        Voir la facture
+                    </button>
+                </div>
+                <div class="produits-list">
+                    <div class="produit-item" *ngFor="let ligne of commande.lignesCommande">
+                        <div class="produit-image">
+                            <img [src]="ligne.produit.image || 'https://via.placeholder.com/80'" alt="{{ ligne.produit.nom }}" (click)="addToWishlist(ligne.produit)">
+                            <button class="wishlist-btn-small" (click)="addToWishlist(ligne.produit); $event.stopPropagation()">
+                                <span class="material-icons">{{ isInWishlist(ligne.produit) ? 'favorite' : 'favorite_border' }}</span>
+                            </button>
+                        </div>
+                        <div class="produit-details">
+                            <div class="produit-header">
+                                <h3 class="produit-name">{{ ligne.produit.nom }}</h3>
+                                <p class="produit-stock" *ngIf="ligne.produit.stock > 0">En stock - Expédié sous 24 heures</p>
+                                <p class="produit-limit" *ngIf="ligne.qte >= 2">Limite de 2 pièces par option et client.</p>
+                            </div>
+                            <div class="produit-footer">
+                                <div class="produit-pricing">
+                                    <span class="original-price">{{ ligne.prixUnitaire | currency:'TND':'symbol' }}</span>
+                                    <span class="discounted-price">{{ (ligne.prixUnitaire * 0.5) | currency:'TND':'symbol' }}</span>
+                                    <span class="discount-percentage">50% de réduction</span>
+                                </div>
+                                <div class="quantity-controls">
+                                    <button (click)="decreaseQuantity(commande, ligne)" class="quantity-btn">-</button>
+                                    <input type="number" [ngModel]="ligne.qte" (ngModelChange)="updateQuantityOnChange(commande, ligne, $event)" min="1" class="quantity-input">
+                                    <button (click)="increaseQuantity(commande, ligne)" class="quantity-btn">+</button>
+                                </div>
+                                <div class="action-buttons">
+                                    <button (click)="updateQuantity(commande, ligne)" class="action-btn">Enregistrer</button>
+                                    <button (click)="deleteLigneCommande(commande, ligne)" class="action-btn">Supprimer</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngIf="!commande.lignesCommande || commande.lignesCommande.length === 0">
+                        <p>Aucun produit dans cette commande.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Updated Payment Sidebar -->
+    <div class="payment-sidebar">
+        <h3>Résumé</h3>
+        <div class="summary-item">
+            <span>Total des articles ({{ getTotalItems() }} pièces)</span>
+            <span>{{ getTotalItemsPrice()* 0.5 | currency:'TND':'symbol' }}</span>
+        </div>
+        <div class="summary-total">
+            <span>Total général</span>
+            <span>{{ getTotalItemsPrice()* 0.5 | currency:'TND':'symbol' }}</span>
+        </div>
+        <button class="continue-btn" (click)="proceedToPaymentFromSummary()">CONTINUER</button>
+    </div>
+</body>
+</html>

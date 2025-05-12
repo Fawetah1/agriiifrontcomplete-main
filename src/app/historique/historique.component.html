@@ -1,0 +1,244 @@
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&family=Poppins:wght@400;500;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Sidebar -->
+    <div class="sidebar" [ngClass]="{'collapsed': isSidebarCollapsed}">
+        <h2>
+            <button class="toggle-btn" (click)="toggleSidebar()">
+                <span class="material-icons">menu</span>
+            </button>
+            <span>Livraison</span>
+        </h2>
+        <ul>
+            <li>
+                <a [routerLink]="['/livraison', userId]" data-tooltip="Orders">
+                    <i class="material-icons">assignment</i><span>Orders</span>
+                </a>
+            </li>
+            <li>
+                <a [routerLink]="['/historique', userId]" data-tooltip="Historique" class="active">
+                    <i class="material-icons">history</i><span>Historique</span>
+                </a>
+            </li>
+            <li>
+                <a [routerLink]="['/profile', userId]" data-tooltip="Profile">
+                    <i class="material-icons">person</i><span>Profile</span>
+                </a>
+            </li>
+            <li>
+                <a [routerLink]="['/map', userId]" data-tooltip="Map">
+                    <i class="material-icons">map</i><span>Map</span>
+                </a>
+            </li>
+            <li>
+                <a href="javascript:void(0)" (click)="logout()" data-tooltip="Logout">
+                    <i class="material-icons">exit_to_app</i><span>Se déconnecter</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container" [ngClass]="{'expanded': isSidebarCollapsed}">
+        <div class="header">
+            <div class="header-content">
+                <h1>Historique des livraisons</h1>
+                <span class="user">Bonjour, {{user.prenom}} {{user.nom}}</span>
+            </div>
+            <div class="header-actions">
+                <button class="refresh-btn" (click)="loadHistory()">
+                    <i class="material-icons">refresh</i>
+                    Refresh
+                </button>
+            </div>
+        </div>
+
+        <div class="history-content">
+            <div class="history-card">
+                <!-- Search and Filter Section -->
+                <div class="search-filter-section">
+                    <div class="search-bar">
+                        <span class="material-icons">Rechercher</span>
+                        <input type="text" placeholder="Rechercher par ID, adresse, livreur, statut ou type..."
+                            [(ngModel)]="searchTerm" (ngModelChange)="onSearchChange($event)" />
+                    </div>
+
+                    <div class="filter-controls">
+                        <div class="filter-field">
+                            <label for="status">Statut</label>
+                            <select id="status" [(ngModel)]="filters.status" (ngModelChange)="applyFilters()">
+                                <option value="">Tous les statuts</option>
+                                <option value="delivered">Livré</option>
+                                <option value="in_progress">En cours</option>
+                                <option value="cancelled">Annulé</option>
+                            </select>
+                        </div>
+                        <div class="filter-field">
+                            <label for="type">Type</label>
+                            <select id="type" [(ngModel)]="filters.type" (ngModelChange)="applyFilters()">
+                                <option value="">Tous les types</option>
+                                <option value="a_domicile">a_domicile</option>
+                                <option value="point_relais">point_relais</option>
+                            </select>
+                        </div>
+                        <div class="filter-field">
+                            <label for="start-date">Date de début</label>
+                            <input type="date" id="start-date" [(ngModel)]="filters.startDate"
+                                (ngModelChange)="applyFilters()" />
+                        </div>
+                        <div class="filter-field">
+                            <label for="end-date">Date de fin</label>
+                            <input type="date" id="end-date" [(ngModel)]="filters.endDate"
+                                (ngModelChange)="applyFilters()" />
+                        </div>
+                    </div>
+
+                    <div class="active-filters">
+                        <div class="filter-chip" *ngFor="let filter of activeFilters" (click)="removeFilter(filter.key)">
+                            {{ filter.value }}
+                            <span class="material-icons remove-chip">close</span>
+                        </div>
+                        <button class="clear-filters" (click)="resetFilters()" *ngIf="activeFilters.length > 0">
+                            Clear All Filters
+                        </button>
+                    </div>
+                </div>
+
+                <!-- History List -->
+                <div class="history-list">
+                    <div *ngIf="isLoading" class="loading-state">
+                        <i class="material-icons">hourglass_empty</i>
+                        <p>Loading delivery history...</p>
+                    </div>
+
+                    <div *ngIf="error" class="error-state">
+                        <i class="material-icons">error_outline</i>
+                        <p>{{ error }}</p>
+                        <button class="retry-btn" (click)="loadHistory()">
+                            <i class="material-icons">refresh</i>
+                            Retry
+                        </button>
+                    </div>
+
+                    <div class="history-item" *ngFor="let entry of filteredHistory" @fadeIn>
+                        <div class="history-info">
+                            <div class="history-main">
+                                <span class="history-id">#{{ entry.id }}</span>
+                                <span class="history-date">{{ entry.date | date: 'mediumDate' }}</span>
+                            </div>
+                            <div class="history-details">
+                                <span class="history-type">{{ entry.type | titlecase }}</span>
+                                <span class="history-status {{ entry.status }}">{{ entry.status | titlecase }}</span>
+                            </div>
+                        </div>
+                        <div class="history-actions">
+                            <button class="view-details" (click)="viewDetails(entry)">
+                                <i class="material-icons">visibility</i>
+                                Voir les détails
+                            </button>
+                        </div>
+                    </div>
+                    <div class="no-results" *ngIf="!isLoading && !error && !filteredHistory.length">
+                        <i class="material-icons">info</i>
+                        <p>No deliveries found matching your criteria.</p>
+                        <button class="reset-search" (click)="resetFilters()">Reset Search</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Details Modal -->
+    <div class="modal-overlay" *ngIf="showDetailsModal" (click)="closeDetailsModal()">
+        <div class="modal-content" (click)="$event.stopPropagation()">
+            <div class="modal-header">
+                <h2>Détails de la livraison</h2>
+                <button class="close-btn" (click)="closeDetailsModal()">
+                    <i class="material-icons">close</i>
+                </button>
+            </div>
+
+            <div class="modal-body" *ngIf="selectedEntry">
+                <div class="details-section">
+                    <h3>Informations de base</h3>
+                    <div class="detail-item">
+                        <span class="label">ID de la livraison:</span>
+                        <span class="value">#{{ selectedEntry.id }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="label">Date:</span>
+                        <span class="value">{{ selectedEntry.date | date: 'medium' }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="label">Type:</span>
+                        <span class="value">{{ selectedEntry.type | titlecase }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="label">Statut:</span>
+                        <span class="value status-badge {{ selectedEntry.status }}">
+                            {{ selectedEntry.status | titlecase }}
+                        </span>
+                    </div>
+                    <div class="detail-item" *ngIf="selectedEntry.address">
+                        <span class="label">Addresse:</span>
+                        <span class="value">{{ selectedEntry.address }}</span>
+                    </div>
+                </div>
+
+                <div class="details-section" *ngIf="selectedEntry.livreur">
+                    <h3>Livreur</h3>
+                    <div class="detail-item">
+                        <span class="label">Nom:</span>
+                        <span class="value">{{ selectedEntry.livreur.nom }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="label">Téléphone:</span>
+                        <span class="value">
+                            <a href="tel:{{ selectedEntry.livreur.telephone }}" class="phone-link">
+                                {{ selectedEntry.livreur.telephone }}
+                            </a>
+                        </span>
+                    </div>
+                    <div class="detail-item" *ngIf="selectedEntry.livreur.latitude && selectedEntry.livreur.longitude">
+                        <span class="label">Localisation:</span>
+                        <span class="value">
+                            {{ selectedEntry.livreur.latitude }}, {{ selectedEntry.livreur.longitude }}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="details-section" *ngIf="selectedEntry.reason">
+                    <h3>Informations supplémentaires</h3>
+                    <div class="detail-item">
+                        <span class="label">Raison:</span>
+                        <span class="value">{{ selectedEntry.reason }}</span>
+                    </div>
+                </div>
+
+                <!-- Manual Location Input Section -->
+                <div class="details-section">
+                    <h3>Votre position</h3>
+                    <div class="detail-item">
+                        <span class="label">Définir manuellement :</span>
+                        <div class="value">
+                            <input type="text" placeholder="Saisissez votre localisation (ex. : ville, adresse)"
+                                [(ngModel)]="manualLocation" class="manual-input" />
+                            <button class="update-location-btn" (click)="setManualLocation()">Mettre à jour la
+                                localisation</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="map-container">
+                    <div id="details-map"></div>
+                    <!-- Distance and duration info -->
+                    <div class="distance-info" *ngIf="distance && duration">
+                        <p><strong>Distance:</strong> {{ distance }} km</p>
+                        <p><strong>Durée estimée:</strong> {{ duration }} minutes</p>
+                        <p><strong>Empreinte carbone :</strong> {{ carbonFootprint }} kg CO₂</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

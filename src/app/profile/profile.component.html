@@ -1,0 +1,98 @@
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+<!-- Sidebar -->
+<div class="sidebar" [ngClass]="{'collapsed': isSidebarCollapsed}">
+    <h2>
+        <button class="toggle-btn" (click)="toggleSidebar()">
+            <span class="material-icons">menu</span>
+        </button>
+        <span>Livraison</span>
+    </h2>
+    <ul>
+        <li>
+            <a [routerLink]="['/livraison', userId]" data-tooltip="Orders">
+                <i class="material-icons">assignment</i><span>Orders</span>
+            </a>
+        </li>
+        <li>
+            <a [routerLink]="['/historique', userId]" data-tooltip="Historique">
+                <i class="material-icons">history</i><span>Historique</span>
+            </a>
+        </li>
+        <li>
+            <a [routerLink]="['/profile', userId]" data-tooltip="Profile" class="active">
+                <i class="material-icons">person</i><span>Profile</span>
+            </a>
+        </li>
+        <li>
+            <a [routerLink]="['/map', userId]" data-tooltip="Map">
+                <i class="material-icons">map</i><span>Map</span>
+            </a>
+        </li>
+        <li>
+            <a href="javascript:void(0)" (click)="logout()" data-tooltip="Logout">
+                <i class="material-icons">exit_to_app</i><span>Se déconnecter</span>
+            </a>
+        </li>
+    </ul>
+</div>
+
+<!-- Main Content -->
+<div class="container" [ngClass]="{'expanded': isSidebarCollapsed}">
+    <div class="header">
+        <h1>Profile</h1>
+        <span class="user">Hello, {{user.prenom}}</span>
+    </div>
+
+    <div class="profile-content">
+        <div class="profile-card">
+            <div class="profile-header">
+                <div class="avatar">
+                    <img
+                      [src]="getUserPhotoUrl()"
+                      alt="avatar"
+                      (error)="handleImageError($event)"
+                      class="avatar"
+                    />
+                  </div>
+
+                <div class="photo-upload" *ngIf="user.role.toLowerCase() === 'livreur'">
+                    <label for="photo-upload" class="upload-btn">
+                        <span class="material-icons">photo_camera</span>
+                        Change Photo
+                    </label>
+                    <input id="photo-upload" type="file" accept="image/*" (change)="onFileSelected($event)"
+                        [disabled]="isUploading" />
+                </div>
+                <h2>{{user.prenom}} {{user.nom}}</h2>
+                <p class="role">{{user.role}}</p>
+            </div>
+
+            <div class="profile-details">
+                <div class="detail-item">
+                    <span class="label">ID:</span>
+                    <span class="value">{{user.id}}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="label">Email:</span>
+                    <span class="value">{{user.email}}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="label">Telephone:</span>
+                    <span class="value">{{user.numeroDeTelephone || 'Non fourni'}}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="label">Adresse de livraison :</span>
+                    <span class="value">{{user.adresseLivraison || 'Non fourni'}}</span>
+                </div>
+            </div>
+
+            <!-- Feedback Messages -->
+            <div class="feedback" *ngIf="isUploading || uploadError || uploadSuccess">
+                <p class="loading" *ngIf="isUploading">Uploading photo...</p>
+                <p class="error" *ngIf="uploadError">{{uploadError}}</p>
+                <p class="success" *ngIf="uploadSuccess">{{uploadSuccess}}</p>
+            </div>
+        </div>
+    </div>
+</div>

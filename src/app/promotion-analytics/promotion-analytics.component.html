@@ -1,0 +1,75 @@
+<div class="analytics-container p-6 bg-white shadow-lg rounded-2xl">
+    <!-- En-tête -->
+    <div class="flex items-center gap-3 mb-6 border-b pb-3">
+      <mat-icon class="text-blue-600 text-3xl">analytics</mat-icon>
+      <h2 class="text-2xl font-bold text-gray-800">Analyse des Promotions</h2>
+    </div>
+  
+    <!-- Chargement -->
+    <div *ngIf="isLoading" class="flex flex-col items-center justify-center py-10 text-center text-gray-500">
+      <mat-spinner diameter="40" class="mb-4"></mat-spinner>
+      <p>Chargement des données...</p>
+    </div>
+  
+    <!-- Erreur -->
+    <div *ngIf="errorMessage && !isLoading" class="bg-red-100 text-red-600 px-4 py-3 rounded-lg mb-6 flex items-center gap-2 animate__animated animate__fadeIn">
+      <mat-icon>error</mat-icon>
+      <span>{{ errorMessage }}</span>
+    </div>
+  
+    <!-- Contenu principal -->
+    <div *ngIf="!isLoading && !errorMessage">
+      
+      <!-- Graphique -->
+      <div class="mb-8">
+        <h3 class="text-lg font-semibold text-gray-700 mb-4">Répartition des promotions</h3>
+        <div *ngIf="isChartDataEmpty" class="text-center text-gray-400 italic">
+          Aucune donnée disponible pour le graphique.
+        </div>
+        <div *ngIf="!isChartDataEmpty">
+          <canvas baseChart
+                  [data]="barChartData"
+                  [options]="barChartOptions"
+                  type="bar"
+                  height="200"
+                  class="w-full max-w-3xl mx-auto">
+          </canvas>
+        </div>
+      </div>
+  
+      <!-- Statistiques -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="bg-gray-50 border rounded-xl p-4 shadow-sm flex items-center gap-4">
+          <div class="w-3 h-3 rounded-full bg-blue-500"></div>
+          <div>
+            <div id="totalPromotions" class="text-xl font-bold text-gray-800">0</div>
+            <div class="text-sm text-gray-500">Promotions totales</div>
+          </div>
+        </div>
+  
+        <div class="bg-gray-50 border rounded-xl p-4 shadow-sm flex items-center gap-4">
+          <div class="w-3 h-3 rounded-full bg-green-500"></div>
+          <div>
+            <div id="activePromotions" class="text-xl font-bold text-gray-800">0</div>
+            <div class="text-sm text-gray-500">Promotions actives</div>
+          </div>
+        </div>
+  
+        <div class="bg-gray-50 border rounded-xl p-4 shadow-sm flex items-center gap-4">
+          <div class="w-3 h-3 rounded-full bg-red-500"></div>
+          <div>
+            <div id="expiredPromotions" class="text-xl font-bold text-gray-800">0</div>
+            <div class="text-sm text-gray-500">Promotions expirées</div>
+          </div>
+        </div>
+  
+        <div class="bg-gray-50 border rounded-xl p-4 shadow-sm flex items-center gap-4">
+          <div class="w-3 h-3 rounded-full bg-purple-500"></div>
+          <div>
+            <div id="totalApplied" class="text-xl font-bold text-gray-800">0</div>
+            <div class="text-sm text-gray-500">Applications totales</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

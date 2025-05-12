@@ -1,0 +1,41 @@
+/* Animation simple */
+@keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.animate-fade-in {
+    animation: fade-in 0.5s ease-in-out;
+}
+
+/* Classes personnalisées */
+.form-label {
+    display: block;
+    color: #4A4A4A; /* Correspond au texte gris */
+    font-weight: 600; /* Police en gras */
+    margin-bottom: 8px;
+}
+
+.form-input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #D1D5DB; /* Bordure grise */
+    border-radius: 8px; /* Coins arrondis */
+    outline: none;
+    transition: all 0.3s ease; /* Animation fluide */
+}
+
+.form-input:focus {
+    border-color: #10B981; /* Bordure verte au focus */
+    ring: 2px solid rgba(16, 185, 129, 0.5); /* Effet de surbrillance verte */
+}
+
+/* Conteneur de formulaire */
+.form-container {
+    background-color: rgba(255, 255, 255, 0.9); /* blanc semi-transparent */
+    border-radius: 20px;
+    padding: 2rem;
+    max-width: 800px;
+    margin: auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Ombre subtile */
+}

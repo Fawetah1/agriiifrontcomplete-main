@@ -1,0 +1,159 @@
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+<!-- Sidebar -->
+<div class="sidebar" [ngClass]="{'collapsed': isSidebarCollapsed}">
+    <h2>
+        <button class="toggle-btn" (click)="toggleSidebar()">
+            <span class="material-icons">menu</span>
+        </button>
+        <span>Livraison</span>
+    </h2>
+    <ul>
+        <li>
+            <a [routerLink]="['/livraison', userId]" data-tooltip="Orders">
+                <i class="material-icons">assignment</i><span>Orders</span>
+            </a>
+        </li>
+        <li>
+            <a [routerLink]="['/historique', userId]" data-tooltip="Historique">
+                <i class="material-icons">history</i><span>Historique</span>
+            </a>
+        </li>
+        <li>
+            <a [routerLink]="['/profile', userId]" data-tooltip="Profile">
+                <i class="material-icons">person</i><span>Profile</span>
+            </a>
+        </li>
+        <li>
+        <li>
+            <a [routerLink]="['/map', userId]" data-tooltip="Map">
+                <i class="material-icons">map</i><span>Map</span>
+            </a>
+        </li>
+        <li>
+            <a href="javascript:void(0)" (click)="logout()" data-tooltip="Logout">
+                <i class="material-icons">exit_to_app</i><span>Se déconnecter</span>
+            </a>
+        </li>
+    </ul>
+</div>
+
+<!-- Main Content -->
+<div class="container" [ngClass]="{'expanded': isSidebarCollapsed}">
+    <div class="header">
+        <h1>Commandes en cours</h1>
+        <div class="header-right">
+            <span class="user">Bonjour, {{driverName}}</span>
+            <button class="refresh-btn" (click)="loadCommandes()">
+                <i class="material-icons">refresh</i>
+            </button>
+        </div>
+    </div>
+
+    <div class="orders-container">
+        <div class="orders-grid" *ngIf="pendingCommandes.length > 0">
+            <div class="order-card" *ngFor="let commande of pendingCommandes" [attr.data-id]="commande.id"
+                [attr.data-status]="commande.statusLivraison">
+                <div class="order-header">
+                    <div class="order-header-left">
+                        <span class="order-id">Commande #{{commande.id}}</span>
+                        <span class="taken-by" *ngIf="commande.isTaken && commande.livreur.nom">
+                            Pris par: {{commande.livreur.nom}}
+                        </span>
+                    </div>
+                    <div class="order-status-container">
+                        <span class="order-status" [ngClass]="{
+              'pending': commande.statusLivraison === 'TAKE_IT',
+              'taken': commande.statusLivraison === 'EN_COURS',
+              'delivered': commande.statusLivraison === 'LIVRE',
+              'not-delivered': commande.statusLivraison === 'NON_LIVRE'
+            }">
+                            {{commande.statusLivraison === 'TAKE_IT' ? 'En attente' :
+                            commande.statusLivraison === 'EN_COURS' ? 'Prise en charge' :
+                            commande.statusLivraison === 'LIVRE' ? 'Livré' : 'Non livré'}}
+                        </span>
+                        <div class="timer-container" *ngIf="commande.id && hidingOrders.has(commande.id)">
+                            <span class="countdown-timer" [ngClass]="{
+                'timer-delivered': commande.statusLivraison === 'LIVRE',
+                'timer-not-delivered': commande.statusLivraison === 'NON_LIVRE'
+              }">
+                                {{commande.id ? getRemainingTime(commande.id) : 0}}s
+                            </span>
+                            <button class="cancel-status-btn" (click)="cancelStatusChange(commande)">
+                                <i class="material-icons">close</i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="take-it-label" *ngIf="commande.isTaken && commande.statusLivraison === 'EN_COURS'">
+                    <i class="material-icons">check_circle</i>
+                    Take-it
+                </div>
+
+                <div class="client-info">
+                    <div class="info-item">
+                        <i class="material-icons">person</i>
+                        <span>{{commande.clientNom}}</span>
+                    </div>
+                    <div class="info-item">
+                        <i class="material-icons">location_on</i>
+                        <span>{{commande.adresse}}</span>
+                    </div>
+                    <div class="info-item">
+                        <i class="material-icons">phone</i>
+                        <span>{{commande.telephone}}</span>
+                    </div>
+                </div>
+
+                <div class="order-actions">
+                    <button *ngIf="!commande.isTaken" class="take-order-btn" (click)="takeOrder(commande)"
+                        [disabled]="commande.id && hidingOrders.has(commande.id)">
+                        <i class="material-icons">assignment_turned_in</i>
+                        Prendre en charge
+                    </button>
+                    <div *ngIf="commande.isTaken && commande.statusLivraison === 'EN_COURS'" class="delivery-actions">
+                        <button class="delivered-btn" (click)="commande.id && showConfirm(commande.id, 'LIVRE')"
+                            [disabled]="commande.id && hidingOrders.has(commande.id)">
+                            <i class="material-icons">check_circle</i>
+                            Livré
+                        </button>
+                        <button class="not-delivered-btn" (click)="commande.id && showConfirm(commande.id, 'NON_LIVRE')"
+                            [disabled]="commande.id && hidingOrders.has(commande.id)">
+                            <i class="material-icons">cancel</i>
+                            Non livré
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="no-orders" *ngIf="pendingCommandes.length === 0">
+            <i class="material-icons">inbox</i>
+            <p>Aucune commande en attente</p>
+        </div>
+    </div>
+</div>
+
+<!-- Carbon Footprint Calculator was here - removed as requested -->
+
+<!-- Confirmation Modal -->
+<div class="modal" id="confirmModal">
+    <div class="modal-content">
+        <p>Mettre à jour le statut pour la commande #{{currentOrderId}}</p>
+        <video #video autoplay [hidden]="!isCameraActive"></video>
+        <canvas #canvas hidden></canvas>
+        <textarea #reasonInput placeholder="Raison de la non-livraison (obligatoire)"
+            [hidden]="!isReasonInputActive"></textarea>
+
+        <div class="modal-buttons" *ngIf="isCameraActive">
+            <button class="livre" (click)="capturePhoto()">Prendre la photo</button>
+            <button class="cancel" (click)="hideConfirm()">Annuler</button>
+        </div>
+
+        <div class="modal-buttons" *ngIf="isReasonInputActive">
+            <button class="non-livre" (click)="submitNonLivre()">Valider</button>
+            <button class="cancel" (click)="hideConfirm()">Annuler</button>
+        </div>
+    </div>
+</div>

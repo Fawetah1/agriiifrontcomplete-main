@@ -1,0 +1,52 @@
+<section id="best-selling-products" class="pb-5">
+  <div class="container-lg">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="section-header d-flex flex-wrap justify-content-between my-4">
+          <h2 class="section-title">Products</h2>
+          <div class="d-flex align-items-center">
+            <a routerLink="/produit-create" class="btn btn-primary rounded-1">Add New Product</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        <div class="product-grid row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-3 row-cols-xl-4 row-cols-xxl-5">
+          <div class="col" *ngFor="let product of products">
+            <div class="product-item">
+              <figure>
+                <a [routerLink]="['/produit-details', product.id]" [title]="product.nom">
+                  <img [src]="getImageUrl(product.image)"
+                       [alt]="product.nom"
+                       class="tab-image img-fluid"
+                       (error)="handleImageError($event)" />
+                </a>
+              </figure>
+              <div class="d-flex flex-column text-center">
+                <h3 class="fs-6 fw-normal">{{ product.nom }}</h3>
+                <div>
+                  <span class="price">{{ product.prix }} {{ product.devise || 'XAF' }}</span>
+                </div>
+                <div class="button-area p-3 pt-0">
+                  <div class="row g-1 mt-2">
+                    <div class="col-12 mb-2">
+                      <button [routerLink]="['/produit-details', product.id]" class="btn btn-info btn-sm w-100">Details</button>
+                    </div>
+                    <div class="col-6">
+                      <button (click)="editProduct(product.id)" class="btn btn-warning btn-sm w-100">Edit</button>
+                    </div>
+                    <div class="col-6">
+                      <button (click)="deleteProduct(product.id)" class="btn btn-danger btn-sm w-100">Delete</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

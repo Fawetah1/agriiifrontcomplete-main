@@ -1,0 +1,70 @@
+<div class="container my-5">
+    <h4 class="text-center mb-4">Statistiques Utilisateurs </h4>
+  
+    <div *ngIf="stats">
+      <div class="bar-item mb-3">
+        <div class="d-flex justify-content-between">
+          <span>👥 Total</span>
+          <span>{{ stats.total }}</span>
+        </div>
+        <div class="progress">
+          <div 
+            class="progress-bar bg-primary"
+            role="progressbar"
+            [style.width.%]="getBarPercentage(stats.total)"
+          >
+            {{ stats.total }}
+          </div>
+        </div>
+      </div>
+  
+      <div class="bar-item mb-3">
+        <div class="d-flex justify-content-between">
+          <span>⛔ Bloqués</span>
+          <span>{{ stats.blocked }}</span>
+        </div>
+        <div class="progress">
+          <div 
+            class="progress-bar bg-danger"
+            role="progressbar"
+            [style.width.%]="getBarPercentage(stats.blocked)"
+          >
+            {{ stats.blocked }}
+          </div>
+        </div>
+      </div>
+  
+      <div class="bar-item mb-3">
+        <div class="d-flex justify-content-between">
+          <span>🛡️ Admins</span>
+          <span>{{ stats.admins }}</span>
+        </div>
+        <div class="progress">
+          <div 
+            class="progress-bar bg-success"
+            role="progressbar"
+            [style.width.%]="getBarPercentage(stats.admins)"
+          >
+            {{ stats.admins }}
+          </div>
+        </div>
+      </div>
+  
+      <div class="bar-item mb-3">
+        <div class="d-flex justify-content-between">
+          <span>🙋 Clients</span>
+          <span>{{ stats.clients }}</span>
+        </div>
+        <div class="progress">
+          <div 
+            class="progress-bar bg-warning text-dark"
+            role="progressbar"
+            [style.width.%]="getBarPercentage(stats.clients)"
+          >
+            {{ stats.clients }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

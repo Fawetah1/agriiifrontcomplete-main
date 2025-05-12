@@ -1,0 +1,74 @@
+<div class="container">
+    <!-- Affichage des messages d'erreur ou de succès -->
+    <div *ngIf="errorMessage" class="alert" [ngClass]="{'alert-success': errorMessage.includes('succès'), 'alert-danger': !errorMessage.includes('succès')}">
+      {{ errorMessage }}
+    </div>
+  
+    <!-- Section pour gérer les opérations de stock -->
+    <div class="card mb-4">
+      <div class="card-header">Gestion des stocks</div>
+      <div class="card-body">
+        <div class="row">
+          <!-- Sélection du produit -->
+          <div class="col-md-4">
+            <label for="produit">Produit</label>
+            <select id="produit" class="form-control" [(ngModel)]="selectedProduit">
+              <option [ngValue]="null">Sélectionner un produit</option>
+              <option *ngFor="let produit of produits" [ngValue]="produit">
+                {{ produit.nom }}
+              </option>
+            </select>
+          </div>
+  
+          <!-- Sélection de l'opération -->
+          <div class="col-md-4">
+            <label for="operation">Opération</label>
+            <select id="operation" class="form-control" [(ngModel)]="operation">
+              <option value="ENTREE">Entrée</option>
+              <option value="PERTE">Perte</option>
+            </select>
+          </div>
+  
+          <!-- Quantité -->
+          <div class="col-md-4">
+            <label for="quantite">Quantité</label>
+            <input id="quantite" type="number" class="form-control" [(ngModel)]="quantite" min="1">
+          </div>
+        </div>
+  
+        <button class="btn btn-primary mt-3" (click)="handleStockOperation()">Enregistrer l'opération</button>
+      </div>
+    </div>
+  
+    
+  
+    <!-- Graphique du stock -->
+    <div class="card mb-4">
+      <div class="card-header">Évolution du stock</div>
+      <div class="card-body">
+        <canvas baseChart
+                [data]="stockChartData"
+                [options]="stockChartOptions"
+                type="line">
+        </canvas>
+      </div>
+    </div>
+  
+    <!-- Graphique des ventes -->
+    <div class="card">
+      <div class="card-header">Produits les plus vendus</div>
+      <div class="card-body">
+        <div *ngIf="topSellingError" class="alert alert-danger">
+          {{ topSellingError }}
+        </div>
+        <div *ngIf="topSellingMessage" class="alert alert-info">
+          {{ topSellingMessage }}
+        </div>
+        <canvas baseChart
+                [data]="salesChartData"
+                [options]="salesChartOptions"
+                type="bar">
+        </canvas>
+      </div>
+    </div>
+  </div>

@@ -1,0 +1,27 @@
+<section class="py-5">
+  <div class="container">
+    <h2 class="mb-4">Produits dans la catégorie "{{ category }}"</h2>
+
+    <div *ngIf="errorMessage" class="alert alert-warning">{{ errorMessage }}</div>
+
+    <div class="row">
+      <div *ngFor="let produit of products" class="col-md-4 mb-4">
+        <div class="card">
+          <img [src]="getImageUrl(produit.image)" (error)="handleImageError($event)" class="card-img-top" alt="{{ produit.nom }}">
+          <div class="card-body">
+            <h5 class="card-title">{{ produit.nom }}</h5>
+            <p class="card-text">{{ produit.prix }} {{ produit.devise }}</p>
+            <button class="btn btn-primary me-2" (click)="editProduct(produit.id)">Modifier</button>
+            <button class="btn btn-danger" (click)="deleteProduct(produit.id)">Supprimer</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pagination -->
+    <div class="d-flex justify-content-center mt-4" *ngIf="totalPages > 1">
+      <button class="btn btn-outline-secondary me-2" (click)="changePage(currentPage - 1)" [disabled]="currentPage === 0">Précédent</button>
+      <button class="btn btn-outline-secondary" (click)="changePage(currentPage + 1)" [disabled]="currentPage >= totalPages - 1">Suivant</button>
+    </div>
+  </div>
+</section>

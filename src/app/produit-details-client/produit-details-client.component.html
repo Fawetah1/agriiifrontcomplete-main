@@ -1,0 +1,44 @@
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="card produit-detail-card">
+        <div class="image-container">
+          <img [src]="imageUrl" class="card-img-top" alt="{{ produit?.nom }}" (error)="imageUrl = '/assets/img/placeholder.jpg'">
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card produit-detail-card">
+        <div class="card-body">
+          <h2 class="card-title">{{ produit?.nom }}</h2>
+          <p class="card-text">{{ produit?.description }}</p>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+              <strong>Prix:</strong> {{ produit?.prix }} {{ produit?.devise || 'XAF' }}
+            </li>
+            <li class="list-group-item">
+              <strong>Catégorie:</strong> {{ produit?.category }}
+            </li>
+            <li class="list-group-item">
+              <strong>Stock:</strong> {{ produit?.stock }}
+            </li>
+            <li class="list-group-item">
+              <strong>Date d'expiration:</strong> {{ produit?.dateExpiration || 'N/A' }}
+            </li>
+            <li class="list-group-item">
+              <strong>Fournisseur:</strong> {{ produit?.fournisseur || 'N/A' }}
+            </li>
+          </ul>
+          <div class="mt-4 text-center d-flex justify-content-center gap-3">
+            <button (click)="goBack()" class="btn btn-outline-secondary">
+              <i class="bi bi-arrow-left-circle"></i> Retour
+            </button>
+            <button (click)="acheterProduit()" class="btn btn-success">
+              <i class="bi bi-cart-fill"></i> Acheter
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

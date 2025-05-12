@@ -1,0 +1,120 @@
+.promotion-view-container {
+  padding: 2rem;
+  background-color: #f8f9fa;
+}
+
+.promotion-view-container h2 {
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 2rem;
+  color: #333;
+}
+
+.promotions-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: center;
+}
+
+.promotion-card {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  width: 100%;
+  max-width: 1000px;
+}
+
+.promotion-card h3 {
+  text-align: center;
+  color: #007bff;
+  margin-bottom: 1rem;
+}
+
+.promotion-card p {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #666;
+}
+
+.products-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  justify-content: center;
+}
+
+.product-card {
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  width: 220px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+}
+
+.product-image {
+  width: 100%;
+  height: 180px;
+  object-fit: contain;
+  background: #fff;
+  padding: 10px;
+}
+
+.product-details {
+  padding: 1rem;
+  text-align: center;
+}
+
+.product-details h4 {
+  font-size: 1.1rem;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.original-price {
+  text-decoration: line-through;
+  color: #999;
+  font-size: 0.9rem;
+}
+
+.discounted-price {
+  color: #28a745;
+  font-weight: bold;
+  margin-top: 0.3rem;
+  font-size: 1rem;
+}
+
+.discount {
+  color: #dc3545;
+  font-size: 0.85rem;
+  margin-top: 0.3rem;
+}
+
+.button-area {
+  margin-top: 1rem;
+}
+
+.button-area .btn {
+  width: 100%;
+  font-weight: 500;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+}
+
+.loading,
+.error,
+.no-promotions {
+  text-align: center;
+  margin-top: 2rem;
+  font-size: 1.2rem;
+  color: #888;
+}

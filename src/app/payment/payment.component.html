@@ -1,0 +1,129 @@
+<div class="payment-page">
+  <div class="container">
+    <div class="row">
+      <!-- Order Summary -->
+      <div class="col-md-5 order-summary">
+        <h2 class="section-title">Résumé des Commandes en Attente</h2>
+        <div *ngIf="pendingCommandes && pendingCommandes.length > 0; else noCommande">
+          <div *ngFor="let commande of pendingCommandes" class="commande-section">
+            <div class="order-header">
+              <h3>Commande #{{ commande.id }}</h3>
+              <span class="order-status">{{ commande.status }}</span>
+            </div>
+            <div class="order-items">
+              <div *ngFor="let ligne of commande.lignesCommande" class="order-item">
+                <img
+                  [src]="ligne.produit.image || 'https://via.placeholder.com/80'"
+                  alt="{{ ligne.produit.nom }}"
+                  class="product-image"
+                >
+                <div class="item-details">
+                  <h4>{{ ligne.produit.nom }}</h4>
+                  <p>Quantité : {{ ligne.qte }}</p>
+                  <p class="item-price">{{ ligne.total | currency:'TND':'symbol' }}</p>
+                </div>
+              </div>
+            </div>
+            <div class="commande-total">
+              <span>Sous-total</span>
+              <span class="subtotal-amount">{{ commande.total | currency:'TND':'symbol' }}</span>
+            </div>
+          </div>
+          <div class="order-total">
+            <span>Total à Payer</span>
+            <span class="total-amount">{{ getCombinedTotal() | currency:'TND':'symbol' }}</span>
+          </div>
+        </div>
+        <ng-template #noCommande>
+          <p class="no-order">Aucune commande en attente à payer.</p>
+        </ng-template>
+      </div>
+
+      <!-- Payment Form -->
+      <div class="col-md-7 payment-form-wrapper">
+        <div class="payment-form">
+          <h2 class="section-title">Paiement</h2>
+          <div *ngIf="paymentError" class="error-message">
+            {{ paymentError }}
+          </div>
+
+          <div class="form-group">
+            <label for="cardholderName">Nom du titulaire de la carte</label>
+            <input
+              type="text"
+              id="cardholderName"
+              [(ngModel)]="cardholderName"
+              placeholder="Nom complet"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="gouvernement">Gouvernorat</label>
+            <select id="gouvernement" [(ngModel)]="gouvernement" required>
+              <option value="" disabled selected>Sélectionnez un gouvernorat</option>
+              <option value="Tunis">Tunis</option>
+              <option value="Ariana">Ariana</option>
+              <option value="Beja">Beja</option>
+              <option value="Ben Arous">Ben Arous</option>
+              <option value="Bizerte">Bizerte</option>
+              <option value="Gabes">Gabès</option>
+              <option value="Gafsa">Gafsa</option>
+              <option value="Jendouba">Jendouba</option>
+              <option value="Kairouan">Kairouan</option>
+              <option value="Kasserine">Kasserine</option>
+              <option value="Kebili">Kébili</option>
+              <option value="Le Kef">Le Kef</option>
+              <option value="Mahdia">Mahdia</option>
+              <option value="Manouba">Manouba</option>
+              <option value="Medenine">Médenine</option>
+              <option value="Monastir">Monastir</option>
+              <option value="Nabeul">Nabeul</option>
+              <option value="Sfax">Sfax</option>
+              <option value="Sidi Bouzid">Sidi Bouzid</option>
+              <option value="Siliana">Siliana</option>
+              <option value="Sousse">Sousse</option>
+              <option value="Tataouine">Tataouine</option>
+              <option value="Tozeur">Tozeur</option>
+              <option value="Zaghouan">Zaghouan</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="postalCode">Code Postal</label>
+            <input
+              type="text"
+              id="postalCode"
+              [(ngModel)]="postalCode"
+              placeholder="Code postal"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Détails de la carte</label>
+            <div #cardElement class="stripe-card-element"></div>
+          </div>
+
+          <div class="card-brands">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" alt="Visa">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" alt="Mastercard">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/7/72/American_Express_logo.svg" alt="Amex">
+          </div>
+
+          <button class="pay-btn" (click)="proceedToCheckout()" [disabled]="isLoading || pendingCommandes.length === 0 || !cardValid || !cardholderName || !gouvernement || !postalCode">
+            {{ isLoading ? 'Traitement...' : 'Payer Maintenant' }}
+          </button>
+
+          <div class="stripe-branding">
+            <p>Sécurisé par Stripe</p>
+            <div class="links">
+              <a href="https://stripe.com/legal" target="_blank">Conditions d'utilisation</a>
+              <a href="https://stripe.com/privacy" target="_blank">Confidentialité</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

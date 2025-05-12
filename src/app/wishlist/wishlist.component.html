@@ -1,0 +1,17 @@
+<div class="container">
+    <h1>My Wishlist</h1>
+    <div *ngIf="wishlist.length === 0" class="no-items">
+      <p>Your wishlist is empty.</p>
+    </div>
+    <div *ngIf="wishlist.length > 0" class="wishlist-list">
+      <div class="wishlist-item" *ngFor="let product of wishlist">
+        <img [src]="product.image || 'https://via.placeholder.com/80'" alt="{{ product.nom }}">
+        <div class="wishlist-details">
+          <h3>{{ product.nom }}</h3>
+          <p>{{ product.description }}</p>
+          <p><strong>Price:</strong> {{ product.prix | currency:'TND':'symbol' }}</p>
+          <button class="remove-btn" (click)="removeFromWishlist(product)">Remove</button>
+        </div>
+      </div>
+    </div>
+  </div>

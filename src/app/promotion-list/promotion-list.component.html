@@ -1,0 +1,314 @@
+<div class="promotion-list-container p-6 bg-gray-50 rounded-lg shadow-md">
+    <h2 class="text-2xl font-bold mb-6 text-center text-gray-800">Liste des Promotions</h2>
+  
+    <!-- Success/Error Messages -->
+    <div *ngIf="successMessage" class="bg-green-100 text-green-700 p-4 rounded-lg mb-4 text-center flex items-center justify-center">
+      <i class="fas fa-check-circle mr-2"></i>
+      {{ successMessage }}
+    </div>
+    <div *ngIf="errorMessage" class="bg-red-100 text-red-700 p-4 rounded-lg mb-4 text-center flex items-center justify-center">
+      <i class="fas fa-exclamation-circle mr-2"></i>
+      {{ errorMessage }}
+    </div>
+  
+    <!-- Modale pour modifier une promotion -->
+    <div *ngIf="editMode" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
+      <div class="bg-white p-6 rounded-lg shadow-md w-full max-w-lg">
+        <h3 class="text-xl font-bold mb-4 text-center text-gray-800">Modifier la Promotion</h3>
+        <form (ngSubmit)="updatePromotion()" class="space-y-4">
+          <!-- Nom -->
+          <div>
+            <label for="nom" class="block text-sm font-medium text-gray-700">Nom</label>
+            <input id="nom" [(ngModel)]="selectedPromotion!.nom" name="nom" type="text"
+                   class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-sm">
+          </div>
+          <!-- Pourcentage de réduction -->
+          <div>
+            <label for="pourcentageReduction" class="block text-sm font-medium text-gray-700">Pourcentage de Réduction</label>
+            <input id="pourcentageReduction" [(ngModel)]="selectedPromotion!.pourcentageReduction" name="pourcentageReduction" type="number"
+                   class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-sm">
+          </div>
+          <!-- Date de début -->
+          <div class="relative">
+            <label for="dateDebut" class="block text-sm font-medium text-gray-700">Date de Début</label>
+            <i class="fas fa-calendar-alt absolute left-4 top-10 transform -translate-y-1/2 text-gray-600 text-base shadow-sm"></i>
+            <input id="dateDebut" [(ngModel)]="selectedPromotionStartDate" name="dateDebut" type="date"
+                   class="w-full pl-12 pr-3 py-1.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-sm appearance-none">
+          </div>
+          <!-- Date de fin -->
+          <div class="relative">
+            <label for="dateFin" class="block text-sm font-medium text-gray-700">Date de Fin</label>
+            <i class="fas fa-calendar-alt absolute left-4 top-10 transform -translate-y-1/2 text-gray-600 text-base shadow-sm"></i>
+            <input id="dateFin" [(ngModel)]="selectedPromotionEndDate" name="dateFin" type="date"
+                   class="w-full pl-12 pr-3 py-1.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-sm appearance-none">
+          </div>
+          <!-- Condition -->
+          <div>
+            <label for="conditionPromotion" class="block text-sm font-medium text-gray-700">Condition</label>
+            <input id="conditionPromotion" [(ngModel)]="selectedPromotion!.conditionPromotion" name="conditionPromotion" type="text"
+                   class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-sm">
+          </div>
+          <!-- Liste des produits associés -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Produits Associés</label>
+            <div *ngIf="selectedPromotion!.produits && selectedPromotion!.produits.length > 0; else noProducts" class="border border-gray-300 rounded-lg p-4 max-h-40 overflow-y-auto">
+              <ul class="list-disc pl-5 space-y-2">
+                <li *ngFor="let product of selectedPromotion!.produits; let i = index" class="flex justify-between items-center">
+                  <span>{{ product.nom }} (Prix: {{ product.prix }} {{ product.devise || 'TND' }})</span>
+                  <button type="button" (click)="removeProductFromPromotion(i)"
+                          class="bg-red-600 text-white text-xs font-semibold py-0.5 px-1.5 rounded-lg hover:bg-red-700 transition-colors shadow-sm"
+                          title="Retirer ce produit">
+                    <i class="fas fa-trash text-xs"></i>
+                  </button>
+                </li>
+              </ul>
+            </div>
+            <ng-template #noProducts>
+              <p class="text-gray-500 italic text-sm">Aucun produit associé.</p>
+            </ng-template>
+          </div>
+          <!-- Ajouter un produit -->
+          <div>
+            <label for="addProduct" class="block text-sm font-medium text-gray-700">Ajouter un Produit</label>
+            <div class="flex items-center space-x-2">
+              <select id="addProduct" [(ngModel)]="selectedProductIdToAdd" name="addProduct"
+                      class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-sm">
+                <option value="" disabled selected>Choisir un produit...</option>
+                <option *ngFor="let product of availableProducts" [value]="product.id">
+                  {{ product.nom }} (Prix: {{ product.prix }} {{ product.devise || 'TND' }})
+                </option>
+              </select>
+              <button type="button" (click)="addProductToPromotion()" [disabled]="!selectedProductIdToAdd"
+                      class="bg-green-600 text-white text-sm font-semibold py-1 px-3 rounded-lg hover:bg-green-700 transition-colors shadow-sm flex items-center disabled:opacity-60">
+                <i class="fas fa-plus mr-1 text-xs"></i> Ajouter
+              </button>
+            </div>
+          </div>
+          <!-- Boutons -->
+          <div class="flex justify-center space-x-2">
+            <button type="submit" class="bg-green-600 text-white text-sm font-semibold py-1 px-3 rounded-lg hover:bg-green-700 transition-colors shadow-sm flex items-center">
+              <i class="fas fa-save mr-1 text-xs"></i> Enregistrer
+            </button>
+            <button type="button" (click)="cancelEdit()" class="bg-gray-600 text-white text-sm font-semibold py-1 px-3 rounded-lg hover:bg-gray-700 transition-colors shadow-sm flex items-center">
+              <i class="fas fa-times mr-1 text-xs"></i> Annuler
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  
+    <!-- Filters and Actions -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+      <!-- Filters -->
+      <div class="flex flex-wrap items-center space-x-2">
+        <div class="relative flex-1 min-w-[200px]">
+          <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-600 text-base shadow-sm"></i>
+          <input type="text" [(ngModel)]="searchTerm" (input)="applyFilters()" placeholder="Rechercher par nom..."
+                 class="pl-12 pr-3 py-1.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 w-full text-sm">
+        </div>
+        <div class="relative flex-1 min-w-[200px]">
+          <i class="fas fa-filter absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-600 text-base shadow-sm"></i>
+          <input type="text" [(ngModel)]="filterCondition" (input)="applyFilters()" placeholder="Filtrer par condition..."
+                 class="pl-12 pr-3 py-1.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 w-full text-sm">
+        </div>
+        <div class="relative flex-1 min-w-[150px]">
+          <i class="fas fa-calendar-alt absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-600 text-base shadow-sm"></i>
+          <input type="date" [(ngModel)]="filterStartDate" (change)="applyFilters()"
+                 class="pl-12 pr-3 py-1.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 w-full text-sm appearance-none">
+        </div>
+        <div class="relative flex-1 min-w-[150px]">
+          <i class="fas fa-calendar-alt absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-600 text-base shadow-sm"></i>
+          <input type="date" [(ngModel)]="filterEndDate" (change)="applyFilters()"
+                 class="pl-12 pr-3 py-1.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 w-full text-sm appearance-none">
+        </div>
+        <button (click)="clearFilters()" class="bg-gray-600 text-white text-sm font-semibold py-1 px-3 rounded-lg hover:bg-gray-700 transition-colors shadow-sm flex items-center">
+          <i class="fas fa-times mr-1 text-sm text-white"></i> Effacer Filtres
+        </button>
+      </div>
+      <!-- Actions -->
+      <div class="flex flex-wrap justify-end space-x-2">
+        <button (click)="getActivePromotions()" class="bg-blue-600 text-white text-sm font-semibold py-1 px-3 rounded-lg hover:bg-blue-700 transition-colors shadow-sm flex items-center">
+          <i class="fas fa-eye mr-1 text-xs"></i> Afficher Actives
+        </button>
+        <button (click)="loadPromotions()" class="bg-blue-600 text-white text-sm font-semibold py-1 px-3 rounded-lg hover:bg-blue-700 transition-colors shadow-sm flex items-center">
+          <i class="fas fa-sync-alt mr-1 text-xs"></i> Rafraîchir
+        </button>
+        <button (click)="exportPromotionsToCSV()" class="bg-green-600 text-white text-sm font-semibold py-1 px-3 rounded-lg hover:bg-green-700 transition-colors shadow-sm flex items-center">
+          <i class="fas fa-file-export mr-1 text-xs"></i> Exporter CSV
+        </button>
+      </div>
+    </div>
+  
+    <!-- Bulk Actions -->
+    <div class="mb-6 flex flex-wrap space-x-2">
+      <button (click)="selectAll()" class="bg-gray-600 text-white text-sm font-semibold py-1 px-3 rounded-lg hover:bg-gray-700 transition-colors shadow-sm flex items-center">
+        <i class="fas fa-check-square mr-1 text-xs"></i> Tout Sélectionner
+      </button>
+      <button (click)="deselectAll()" class="bg-gray-600 text-white text-sm font-semibold py-1 px-3 rounded-lg hover:bg-gray-700 transition-colors shadow-sm flex items-center">
+        <i class="fas fa-square mr-1 text-xs"></i> Tout Désélectionner
+      </button>
+      <button (click)="bulkActivate()" [disabled]="selectedPromotionIds.size === 0"
+              class="bg-green-600 text-white text-sm font-semibold py-1 px-3 rounded-lg hover:bg-green-700 transition-colors shadow-sm flex items-center disabled:opacity-60">
+        <i class="fas fa-play mr-1 text-xs"></i> Activer Sélection
+      </button>
+      <button (click)="bulkDeactivate()" [disabled]="selectedPromotionIds.size === 0"
+              class="bg-yellow-600 text-white text-sm font-semibold py-1 px-3 rounded-lg hover:bg-yellow-700 transition-colors shadow-sm flex items-center disabled:opacity-60">
+        <i class="fas fa-pause mr-1 text-xs"></i> Désactiver Sélection
+      </button>
+      <button (click)="bulkDelete()" [disabled]="selectedPromotionIds.size === 0"
+              class="bg-red-600 text-white text-sm font-semibold py-1 px-3 rounded-lg hover:bg-red-700 transition-colors shadow-sm flex items-center disabled:opacity-60">
+        <i class="fas fa-trash mr-1 text-xs"></i> Supprimer Sélection
+      </button>
+    </div>
+  
+    <!-- Promotions Table -->
+    <div class="overflow-x-auto rounded-lg shadow-md">
+      <table class="min-w-full bg-white">
+        <thead>
+          <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+            <th class="py-3 px-6 text-left">
+              <input type="checkbox" (change)="selectAll()" [checked]="selectedPromotionIds.size === paginatedPromotions.length && paginatedPromotions.length > 0"
+                     aria-label="Sélectionner toutes les promotions">
+            </th>
+            <th class="py-3 px-6 text-left cursor-pointer" (click)="sortPromotions('id')">
+              ID <i class="fas fa-sort ml-1"></i>
+            </th>
+            <th class="py-3 px-6 text-left cursor-pointer" (click)="sortPromotions('nom')">
+              Nom <i class="fas fa-sort ml-1"></i>
+            </th>
+            <th class="py-3 px-6 text-left cursor-pointer" (click)="sortPromotions('pourcentageReduction')">
+              Réduction (%) <i class="fas fa-sort ml-1"></i>
+            </th>
+            <th class="py-3 px-6 text-left cursor-pointer" (click)="sortPromotions('dateDebut')">
+              Date Début <i class="fas fa-sort ml-1"></i>
+            </th>
+            <th class="py-3 px-6 text-left cursor-pointer" (click)="sortPromotions('dateFin')">
+              Date Fin <i class="fas fa-sort ml-1"></i>
+            </th>
+            <th class="py-3 px-6 text-left cursor-pointer" (click)="sortPromotions('conditionPromotion')">
+              Condition <i class="fas fa-sort ml-1"></i>
+            </th>
+            <th class="py-3 px-6 text-left cursor-pointer" (click)="sortPromotions('active')">
+              Active <i class="fas fa-sort ml-1"></i>
+            </th>
+            <th class="py-3 px-6 text-left">Produits</th>
+            <th class="py-3 px-6 text-left">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="text-gray-600 text-sm font-light">
+          <tr *ngFor="let promotion of paginatedPromotions" class="border-b border-gray-200 hover:bg-gray-50 transition-colors">
+            <td class="py-3 px-6 text-left">
+              <input type="checkbox" (change)="toggleSelection(promotion.id)" [checked]="selectedPromotionIds.has(promotion.id)"
+                     [attr.aria-label]="'Sélectionner la promotion ' + promotion.nom">
+            </td>
+            <td class="py-3 px-6 text-left">{{ promotion.id }}</td>
+            <td class="py-3 px-6 text-left flex items-center">
+              <span class="relative">
+                {{ promotion.nom }}
+                <span *ngIf="isAISuggested(promotion)" class="ml-2 inline-block bg-blue-100 text-blue-800 text-xs font-semibold px-2 py-1 rounded">
+                  <i class="fas fa-robot mr-1"></i> Suggéré par IA
+                </span>
+              </span>
+            </td>
+            <td class="py-3 px-6 text-left">{{ promotion.pourcentageReduction }}%</td>
+            <td class="py-3 px-6 text-left">{{ formatDateForInput(promotion.dateDebut) }}</td>
+            <td class="py-3 px-6 text-left">{{ formatDateForInput(promotion.dateFin) }}</td>
+            <td class="py-3 px-6 text-left">{{ promotion.conditionPromotion || 'N/A' }}</td>
+            <td class="py-3 px-6 text-left">
+              <span class="inline-block px-2 py-1 rounded-full text-xs font-semibold"
+                    [ngClass]="promotion.active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'">
+                {{ promotion.active ? 'Oui' : 'Non' }}
+              </span>
+            </td>
+            <td class="py-3 px-6 text-left">
+              <div *ngIf="promotion.produits && promotion.produits.length > 0; else noProducts">
+                <ul class="list-disc pl-5">
+                  <li *ngFor="let product of promotion.produits">
+                    {{ product.nom }}: 
+                    <span class="font-semibold">Prix initial: {{ product.prix }} {{ product.devise || 'TND' }}</span>,
+                    <span class="font-semibold text-green-600">Prix réduit: {{ calculateDiscountedPrice(product.prix, promotion.pourcentageReduction) }} {{ product.devise || 'TND' }}</span>
+                  </li>
+                </ul>
+              </div>
+              <ng-template #noProducts>
+                <span class="text-gray-500 italic">Aucun produit associé</span>
+              </ng-template>
+            </td>
+            <td class="py-3 px-6 text-left flex space-x-1">
+              <button *ngIf="isAISuggested(promotion)" (click)="acceptAISuggestion(promotion.id)"
+                      class="bg-green-600 text-white text-xs font-semibold py-0.5 px-1.5 rounded-lg hover:bg-green-700 transition-colors shadow-sm"
+                      title="Accepter la suggestion IA">
+                <i class="fas fa-check text-xs"></i>
+              </button>
+              <button *ngIf="isAISuggested(promotion)" (click)="rejectAISuggestion(promotion.id)"
+                      class="bg-red-600 text-white text-xs font-semibold py-0.5 px-1.5 rounded-lg hover:bg-red-700 transition-colors shadow-sm"
+                      title="Rejeter la suggestion IA">
+                <i class="fas fa-times text-xs"></i>
+              </button>
+              <button (click)="editPromotion(promotion)"
+                      class="bg-yellow-600 text-white text-xs font-semibold py-0.5 px-1.5 rounded-lg hover:bg-yellow-700 transition-colors shadow-sm"
+                      title="Modifier la promotion">
+                <i class="fas fa-edit text-xs"></i>
+              </button>
+              <button (click)="deletePromotion(promotion.id)"
+                      class="bg-red-600 text-white text-xs font-semibold py-0.5 px-1.5 rounded-lg hover:bg-red-700 transition-colors shadow-sm"
+                      title="Supprimer la promotion">
+                <i class="fas fa-trash text-xs"></i>
+              </button>
+              <button (click)="toggleActiveStatus(promotion)"
+                      class="text-xs font-semibold py-0.5 px-2 rounded-lg transition-colors shadow-sm"
+                      [ngClass]="promotion.active ? 'bg-green-600 text-white' : 'bg-gray-600 text-white'"
+                      [title]="promotion.active ? 'Désactiver la promotion' : 'Activer la promotion'">
+                <i class="fas" [ngClass]="promotion.active ? 'fa-pause' : 'fa-play'" [ngClass]="{'text-xs': true}"></i>
+                <span class="ml-1">{{ promotion.active ? 'Désactiver' : 'Activer' }}</span>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  
+    <!-- Pagination -->
+    <div class="mt-6 flex justify-between items-center">
+      <button (click)="previousPage()" 
+              class="bg-gray-300 text-gray-700 text-sm font-semibold py-1 px-3 rounded-lg hover:bg-gray-400 transition-colors shadow-sm flex items-center disabled:opacity-60" 
+              [disabled]="currentPage === 1"
+              aria-label="Page précédente">
+        <i class="fas fa-chevron-left mr-1 text-xs"></i> Précédent
+      </button>
+  
+      <span class="text-gray-700 font-medium">
+        Page {{ currentPage }} sur {{ totalPages }}
+      </span>
+  
+      <button (click)="nextPage()" 
+              class="bg-gray-300 text-gray-700 text-sm font-semibold py-1 px-3 rounded-lg hover:bg-gray-400 transition-colors shadow-sm flex items-center disabled:opacity-60" 
+              [disabled]="currentPage === totalPages"
+              aria-label="Page suivante">
+        Suivant <i class="fas fa-chevron-right ml-1 text-xs"></i>
+      </button>
+    </div>
+  </div>
+  
+  <style>
+    /* Styles pour les tooltips */
+    [title]:hover::after {
+      content: attr(title);
+      position: absolute;
+      background: #333;
+      color: #fff;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      white-space: nowrap;
+      z-index: 10;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+  
+    /* Style pour supprimer l'icône par défaut des champs de date */
+    input[type="date"]::-webkit-calendar-picker-indicator {
+      display: none;
+    }
+  </style>

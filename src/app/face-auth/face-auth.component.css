@@ -1,0 +1,17 @@
+video {
+    margin-bottom: 12px;
+    border-radius: 12px;
+  }
+  button {
+    margin-right: 10px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  video {
+    transform: scaleX(-1);
+    border: 1px solid #ccc;
+    border-radius: 12px;
+  }
+  
+  

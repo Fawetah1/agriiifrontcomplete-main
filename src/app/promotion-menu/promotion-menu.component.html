@@ -1,0 +1,30 @@
+<div class="menu-container">
+    <!-- Agrandir la bannière ici -->
+    <div class="relative h-[450px] rounded-lg mb-6 banner">
+      <div class="overlay">
+        <div class="text-center text-white banner-text">
+          <h1 class="text-4xl font-bold">Bienvenue chez AgriPromo</h1>
+          <p class="text-xl">Les meilleures promotions pour vos produits agricoles !</p>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Menu -->
+    <nav class="bg-white shadow-md rounded-lg p-4">
+      <ul class="flex space-x-4 justify-center">
+        <li *ngFor="let link of navLinks">
+          <a [routerLink]="link.path"
+             class="nav-button"
+             [ngClass]="{'active': isActive(link.path)}"
+             [style.backgroundColor]="link.color"
+             [style.--hover-color]="link.hoverColor"
+             (click)="onNavClick(link.path)">
+            <i class="fas" [ngClass]="link.icon"></i>
+            <span class="ml-2">{{ link.label }}</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  
+    <router-outlet></router-outlet>
+  </div>

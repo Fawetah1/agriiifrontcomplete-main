@@ -1,0 +1,79 @@
+<div class="container">
+  <h2 class="title">{{ isEditMode ? 'Edit Product' : 'Add a Product' }}</h2>
+  <form (ngSubmit)="onSubmit()" class="form-card">
+    <div class="form-group">
+      <label>Nom *</label>
+      <input type="text" [(ngModel)]="produit.nom" name="nom" class="form-control" required>
+    </div>
+
+    <div class="form-group">
+      <label>Description</label>
+      <textarea [(ngModel)]="produit.description" name="description" class="form-control"></textarea>
+    </div>
+
+    <div class="form-group">
+      <label>Prix *</label>
+      <input type="number" [(ngModel)]="produit.prix" name="prix" class="form-control" required>
+    </div>
+
+    
+
+    <div class="form-group">
+      <label>Taxe (%)</label>
+      <input type="number" [(ngModel)]="produit.taxe" name="taxe" class="form-control">
+    </div>
+
+    <div class="form-group">
+      <label>Date d'expiration
+      </label>
+      <input type="date" [(ngModel)]="produit.dateExpiration" name="dateExpiration" class="form-control">
+    </div>
+
+    <div class="form-group">
+      <label>Stock</label>
+      <input type="number" [(ngModel)]="produit.stock" name="stock" class="form-control">
+    </div>
+
+    <div class="form-group">
+      <label>Seuil de stock minimum
+      </label>
+      <input type="number" [(ngModel)]="produit.seuilMin" name="seuilMin" class="form-control">
+    </div>
+
+    <div class="form-group">
+      <label>Categories *</label>
+      <select [(ngModel)]="produit.category" name="category" class="form-control" required>
+        <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
+      </select>
+    </div>
+
+    <div class="form-group form-check">
+      <input type="checkbox" [(ngModel)]="produit.autoReapprovisionnement" name="autoReapprovisionnement" class="form-check-input" id="autoReappro">
+      <label class="form-check-label" for="autoReappro">Activer le réapprovisionnement automatique</label>
+    </div>
+
+    <div *ngIf="produit.autoReapprovisionnement" class="form-group">
+      <label>Quantité de réapprovisionnement
+      </label>
+      <input type="number" [(ngModel)]="produit.quantiteReapprovisionnement" name="quantiteReapprovisionnement" class="form-control">
+    </div>
+
+    <div class="form-group">
+      <label>Image de Produit {{ isEditMode ? '' : '*' }}</label>
+      <input type="file" (change)="onFileChange($event)" class="form-control" accept="image/*" [required]="!isEditMode">
+      <small *ngIf="isEditMode && currentImageUrl" class="text-muted">
+        Current image: <a [href]="currentImageUrl" target="_blank">Voir tout</a>
+      </small>
+      <!-- Optionnel : Affiche un aperçu de l'image sélectionnée -->
+      <div *ngIf="selectedFile">
+        <p>Selected image: {{ selectedFile.name }}</p>
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary w-100 mt-3">
+      {{ isEditMode ? 'Mettre à jour le produit' : 'Créer un produit'}}    </button>
+    <button type="button" class="btn btn-secondary w-100 mt-2" (click)="cancel()">
+      Annuler
+    </button>
+  </form>
+</div>

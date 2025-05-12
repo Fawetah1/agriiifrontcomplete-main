@@ -1,0 +1,14 @@
+<h2>Authentification Faciale</h2>
+
+<video #videoElement autoplay muted width="480" height="360" style="border:1px solid #ccc;"></video>
+<br />
+
+<button (click)="captureFace()">📸 Capturer le Visage</button>
+<button (click)="onCopy()" [disabled]="!descriptorJson">📋 Copier Descripteur</button>
+
+<p style="color: green;" *ngIf="message">{{ message }}</p>
+
+<div *ngIf="descriptorJson">
+  <h4>Descripteur facial :</h4>
+  <textarea rows="5" cols="70" readonly>{{ descriptorJson }}</textarea>
+</div>

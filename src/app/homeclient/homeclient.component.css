@@ -1,0 +1,89 @@
+.category-carousel {
+  overflow: visible !important;
+}
+
+.category-card {
+  width: 200px;
+  transition: transform 0.3s;
+  border-radius: 10px;
+  overflow: hidden;
+  background: white;
+  box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+}
+
+.category-img {
+  height: 150px;
+  object-fit: cover;
+  width: 100%;
+}
+
+.product-item {
+  border: 1px solid #eee;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: all 0.3s;
+}
+
+.product-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.swiper-buttons .btn {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.recommended-products {
+  background-color: #f8f9fa;
+}
+
+.card {
+  transition: transform 0.3s;
+  border-radius: 8px;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.card-img-top {
+  height: 180px;
+  object-fit: contain;
+  background-color: white;
+}
+.welcome-notification {
+  display: flex;
+  align-items: center;
+  background-color: #e0f7fa;
+  border-left: 6px solid #00acc1;
+  padding: 15px 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  margin: 20px 0;
+  font-family: 'Segoe UI', sans-serif;
+  animation: fadeIn 0.8s ease-in-out;
+}
+
+.welcome-notification .icon {
+  font-size: 2rem;
+  margin-right: 15px;
+}
+
+.welcome-notification .message {
+  font-size: 1.1rem;
+  color: #004d40;
+}
+
+.welcome-notification .message strong {
+  color: #006064;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}

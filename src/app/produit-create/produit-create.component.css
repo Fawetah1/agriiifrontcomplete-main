@@ -1,0 +1,29 @@
+.form-container {
+  max-width: 600px;
+  margin: auto;
+  padding: 30px;
+  border-radius: 12px;
+  background-color: #f9f9f9;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  font-weight: bold;
+  color: #343a40;
+}
+
+.btn-primary {
+  background-color: #ff7f50;
+  border-color: #ff7f50;
+  font-weight: 500;
+}
+
+.btn-primary:hover {
+  background-color: #e06641;
+  border-color: #e06641;
+}
+
+.alert {
+  border-radius: 8px;
+  font-weight: 500;
+}

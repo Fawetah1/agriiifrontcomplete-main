@@ -1,0 +1,141 @@
+body {
+  background: linear-gradient(to right, #a8e063, #56ab2f);
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.login-form {
+  max-width: 450px;
+  margin: 80px auto;
+  padding: 40px 30px;
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+  animation: fadeIn 0.8s ease-in-out;
+  position: relative;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.login-form h2 {
+  text-align: center;
+  margin-bottom: 25px;
+  color: #2e7d32;
+  font-weight: 600;
+  font-size: 28px;
+}
+
+.login-form h3 {
+  text-align: center;
+  margin: 30px 0 10px;
+  font-size: 18px;
+  color: #388e3c;
+  font-weight: 600;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  font-weight: 500;
+  color: #4e944f;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #cce3cc;
+  border-radius: 10px;
+  font-size: 15px;
+  transition: all 0.3s ease;
+}
+
+.form-group input:focus {
+  border-color: #66bb6a;
+  box-shadow: 0 0 5px rgba(102, 187, 106, 0.5);
+  outline: none;
+}
+
+.btn-submit,
+.btn-secondary {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #66bb6a, #388e3c);
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  margin-bottom: 15px;
+}
+
+.btn-submit:hover,
+.btn-secondary:hover {
+  background: linear-gradient(135deg, #57a35f, #2e7d32);
+}
+
+.message {
+  margin-top: 10px;
+  font-weight: 500;
+  text-align: center;
+  color: #2e7d32;
+  font-size: 14px;
+}
+
+.message.error {
+  color: #dc3545;
+}
+
+.link-message {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 14px;
+  color: #2e7d32;
+}
+
+.link-message a {
+  color: #388e3c;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+.link-message a:hover {
+  color: #2e7d32;
+  text-decoration: underline;
+}
+
+video {
+  width: 100%;
+  border: 2px solid #cce3cc;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  transform: scaleX(-1);
+  object-fit: cover;
+}
+
+.score-info {
+  text-align: center;
+  font-size: 15px;
+  color: #2e7d32;
+  margin-bottom: 10px;
+}
+
+.analysis-box {
+  background: #f4fff4;
+  border: 1px solid #c8e6c9;
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 15px;
+  font-size: 14px;
+  color: #2e7d32;
+}

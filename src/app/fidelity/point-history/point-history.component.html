@@ -1,0 +1,45 @@
+<div class="container-fluid mt-5">
+    <div class="card shadow-sm border-0 rounded-3">
+      <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+        <h2 class="card-title mb-0">Historique des Points</h2>
+      </div>
+      <div class="card-body">
+        <div *ngIf="pointHistory.length > 0; else noHistory">
+          <!-- Tableau des points -->
+          <table class="table table-bordered table-hover">
+            <thead class="table-light">
+              <tr>
+                <th>Date</th>
+                <th>Description</th>
+                <th>Points Ajoutés</th>
+                <th>Points Totaux</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let history of pointHistory">
+                <td>{{ history.date | date: 'dd/MM/yyyy' }}</td>
+                <td>{{ history.description }}</td>
+                <td>{{ history.points_added }}</td>
+                <td>{{ history.points }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+  
+        <!-- Message si aucun historique -->
+        <ng-template #noHistory>
+          <div class="text-center text-muted">
+            <p>Aucun historique de points trouvé.</p>
+          </div>
+        </ng-template>
+      </div>
+  
+      <!-- Footer avec bouton retour -->
+      <div class="card-footer d-flex justify-content-between">
+        <a [routerLink]="['/fidelities']" class="btn btn-outline-secondary btn-lg">
+          <i class="bi bi-arrow-left"></i> Retour
+        </a>
+      </div>
+    </div>
+  </div>
+  

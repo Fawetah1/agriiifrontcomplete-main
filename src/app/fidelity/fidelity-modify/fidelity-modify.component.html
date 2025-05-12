@@ -1,0 +1,45 @@
+<div class="container-fluid mt-5">
+    <div class="card shadow-sm border-0 rounded-3">
+      <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+        <h2 class="card-title mb-0">Modifier les Points</h2>
+      </div>
+      <div class="card-body">
+        <div *ngIf="fidelity; else loading">
+          <!-- Informations sur l'utilisateur -->
+          <div class="mb-4">
+            <h3 class="text-primary">{{ fidelity.user?.nom }} {{ fidelity.user?.prenom }}</h3>
+            <p class="card-text text-muted"><strong>Email:</strong> {{ fidelity.user?.email }}</p>
+            <p class="card-text text-muted"><strong>Points Actuels:</strong> {{ fidelity.points }}</p>
+            <p class="card-text text-muted"><strong>Niveau Actuel:</strong> {{ fidelity.niveau }}</p>
+          </div>
+  
+          <!-- Formulaire d'ajout de points -->
+          <form (ngSubmit)="addPoints()" class="mt-4">
+            <div class="mb-4">
+              <label for="points" class="form-label">Points à Ajouter</label>
+              <input type="number" class="form-control" id="points" [(ngModel)]="pointsToAdd" name="points" min="1" required />
+            </div>
+  
+            <div class="d-flex justify-content-between">
+              <button type="submit" class="btn btn-outline-primary btn-lg">
+                <i class="bi bi-plus-circle"></i> Ajouter Points
+              </button>
+              <a [routerLink]="['/fidelities']" class="btn btn-outline-secondary btn-lg">
+                <i class="bi bi-arrow-left"></i> Retour
+              </a>
+            </div>
+          </form>
+        </div>
+  
+        <!-- Chargement -->
+        <ng-template #loading>
+          <div class="text-center">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Chargement...</span>
+            </div>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+  

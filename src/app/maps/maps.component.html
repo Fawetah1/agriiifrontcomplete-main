@@ -1,0 +1,7 @@
+<div id="map"></div>
+
+<div class="distance-info" *ngIf="distance && duration && carbonFootprint">
+    <p><strong>Distance :</strong> {{ distance }} km</p>
+    <p><strong>Durée estimée :</strong> {{ duration }} minutes</p>
+    <p><strong>Empreinte carbone :</strong> {{ carbonFootprint }} kg CO₂</p>
+</div>

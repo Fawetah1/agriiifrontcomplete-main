@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <!-- Inclure Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Inclure Font Awesome pour les icônes -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    /* Animation de chargement */
+    .spinner {
+      border: 4px solid rgba(0, 0, 0, 0.1);
+      border-left: 4px solid #3b82f6;
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Style pour les cartes de promotion */
+    .promotion-card {
+      transition: transform 0.2s ease-in-out;
+    }
+
+    .promotion-card:hover {
+      transform: translateY(-5px);
+    }
+
+    /* Style pour les produits */
+    .produit-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .produit-item:last-child {
+      border-bottom: none;
+    }
+  </style>
+</head>
+<body>
+  <!-- Chargement -->
+  <div *ngIf="isLoadingPromotions" class="flex flex-col items-center justify-center py-10">
+    <div class="spinner"></div>
+    <p class="mt-4 text-gray-600 text-lg">Chargement des promotions...</p>
+  </div>
+
+  <!-- Message d'erreur -->
+  <div *ngIf="errorMessagePromotions" class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 m-4 rounded-md">
+    <p class="font-semibold">{{ errorMessagePromotions }}</p>
+  </div>
+
+  <!-- Contenu principal -->
+  <div *ngIf="!isLoadingPromotions && !errorMessagePromotions" class="container mx-auto p-6">
+    <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">Promotions Dynamiques</h2>
+
+    <!-- Liste des promotions -->
+    <div *ngIf="promotionsAutomatiques.length > 0; else noPromotions" class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <div *ngFor="let promo of promotionsAutomatiques" class="promotion-card bg-white shadow-lg rounded-lg p-6 border border-gray-200">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-xl font-semibold text-blue-600">{{ promo.nom }}</h3>
+          <span *ngIf="promo.isAISuggested" class="inline-block bg-blue-100 text-blue-800 text-xs font-semibold px-2 py-1 rounded">
+            <i class="fas fa-robot mr-1"></i> Suggéré par IA
+          </span>
+        </div>
+        <div class="space-y-2">
+          <p *ngIf="!promo.waitingForDetection" class="text-gray-700">
+            <span class="font-medium">Réduction :</span> {{ promo.pourcentageReduction }}%
+          </p>
+          <p class="text-gray-700">
+            <span class="font-medium">Condition :</span> {{ formatCondition(promo.conditionPromotion) }}
+          </p>
+          <p class="text-gray-700">
+            <span class="font-medium">Du :</span> {{ formatDate(promo.dateDebut) }}
+          </p>
+          <p class="text-gray-700">
+            <span class="font-medium">Au :</span> {{ formatDate(promo.dateFin) }}
+          </p>
+          <p *ngIf="promo.active; else scheduled" class="text-green-600 font-medium">
+            <span class="inline-flex items-center">
+              <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              Statut : Active
+            </span>
+          </p>
+          <ng-template #scheduled>
+            <p *ngIf="promo.dateActivationPrevue && !promo.waitingForDetection; else waitingOrInactive" class="text-yellow-600 font-medium">
+              <span class="inline-flex items-center">
+                <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                Statut : Prévue pour le {{ formatDate(promo.dateActivationPrevue) }}
+              </span>
+            </p>
+            <ng-template #waitingOrInactive>
+              <p *ngIf="promo.waitingForDetection" class="text-gray-600 font-medium">
+                <span class="inline-flex items-center">
+                  <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                  </svg>
+                  Statut : En attente de détection de produits
+                </span>
+              </p>
+              <p *ngIf="!promo.waitingForDetection" class="text-red-600 font-medium">
+                <span class="inline-flex items-center">
+                  <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                  </svg>
+                  Statut : Inactive
+                </span>
+              </p>
+            </ng-template>
+          </ng-template>
+        </div>
+
+        <!-- Liste des produits associés -->
+        <div *ngIf="promo.produits && promo.produits.length > 0" class="mt-4">
+          <h4 class="text-lg font-medium text-gray-800 mb-2">Produits concernés :</h4>
+          <div class="bg-gray-50 rounded-md p-4">
+            <div *ngFor="let produit of promo.produits" class="produit-item">
+              <div>
+                <p class="text-gray-700 font-medium">{{ produit.nom }}</p>
+                <p class="text-sm text-gray-500">
+                  Prix actuel : {{ produit.prix }} {{ produit.devise }}
+                  <span *ngIf="promo.active && promo.conditionPromotion === 'EXPIRATION_PRODUIT'" class="text-gray-400">
+                    (Prix initial : {{ getPrixInitial(produit) }} {{ produit.devise }})
+                  </span>
+                </p>
+              </div>
+              <p class="text-sm text-gray-500">
+                Expire le : {{ formatDate(produit.dateExpiration) }}
+              </p>
+            </div>
+          </div>
+        </div>
+        <!-- Message si en attente de détection -->
+        <div *ngIf="promo.waitingForDetection" class="mt-4 text-gray-500 italic">
+          Aucun produit détecté pour le moment. Une promotion sera générée automatiquement lorsqu'un produit répondra aux critères (faibles ventes et expiration proche).
+        </div>
+      </div>
+    </div>
+
+    <!-- Message si aucune promotion -->
+    <ng-template #noPromotions>
+      <div class="text-center py-10">
+        <p class="text-gray-500 text-lg">Aucune promotion dynamique disponible.</p>
+      </div>
+    </ng-template>
+
+    <!-- Highlight pour la promotion d'expiration active -->
+    <div *ngIf="promotionExpirationActive" class="highlight mt-8 bg-blue-50 border-l-4 border-blue-500 p-6 rounded-r-lg">
+      <div class="flex items-center justify-between mb-2">
+        <h3 class="text-xl font-semibold text-blue-700">Promotion d'expiration active : {{ promotionExpirationActive.nom }}</h3>
+        <span *ngIf="promotionExpirationActive.isAISuggested" class="inline-block bg-blue-100 text-blue-800 text-xs font-semibold px-2 py-1 rounded">
+          <i class="fas fa-robot mr-1"></i> Suggéré par IA
+        </span>
+      </div>
+      <p class="text-blue-600">Réduction : {{ promotionExpirationActive.pourcentageReduction }}%</p>
+      <p class="text-blue-600">Valide jusqu'au : {{ formatDate(promotionExpirationActive.dateFin) }}</p>
+    </div>
+  </div>
+</body>
+</html>

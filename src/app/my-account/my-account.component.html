@@ -1,0 +1,133 @@
+<div class="my-account-container">
+  <!-- Header avec photo de profil -->
+  <div class="profile-header">
+    <div class="back-button" (click)="goBack()">
+      <i class="fas fa-arrow-left"></i>
+      Retour
+    </div>
+    <div class="profile-photo-container">
+      <div class="profile-photo-wrapper">
+        <img 
+          [src]="getPhotoUrl()"
+          alt="Photo de profil"
+          class="profile-photo"
+          (error)="handleImageError($event)"
+        >
+        <div class="photo-overlay" *ngIf="!isEditing">
+          <label class="upload-button">
+            <i class="fas fa-camera"></i>
+            <input 
+              type="file" 
+              (change)="onFileSelected($event)" 
+              accept="image/*" 
+              style="display: none;"
+            >
+          </label>
+        </div>
+      </div>
+      <h1 class="user-name">{{ currentUser?.nom }} {{ currentUser?.prenom }}</h1>
+      <span class="user-role">{{ currentUser?.role }}</span>
+    </div>
+  </div>
+
+  <!-- Contenu principal -->
+  <div class="main-content">
+    <!-- Messages de notification -->
+    <div class="notification success" *ngIf="successMessage">
+      <i class="fas fa-check-circle"></i>
+      {{ successMessage }}
+    </div>
+    <div class="notification error" *ngIf="errorMessage">
+      <i class="fas fa-exclamation-circle"></i>
+      {{ errorMessage }}
+    </div>
+
+    <!-- Bouton pour l'historique des points -->
+    <div class="point-history-button">
+      <button class="history-button" [routerLink]="['/history', currentUser?.id]">
+        <i class="fas fa-history"></i>
+        Historique des Points
+      </button>
+    </div>
+
+    <!-- Carte d'informations -->
+    <div class="info-card">
+      <div class="card-header">
+        <h2>Informations du Profil</h2>
+        <button *ngIf="!isEditing" class="edit-button" (click)="onEdit()">
+          <i class="fas fa-edit"></i>
+          Modifier
+        </button>
+      </div>
+
+      <!-- Mode lecture -->
+      <div class="info-content" *ngIf="!isEditing">
+        <div class="info-group">
+          <div class="info-item">
+            <label>Nom</label>
+            <p>{{ currentUser?.nom }}</p>
+          </div>
+          <div class="info-item">
+            <label>Prénom</label>
+            <p>{{ currentUser?.prenom }}</p>
+          </div>
+        </div>
+        <div class="info-group">
+          <div class="info-item">
+            <label>Email</label>
+            <p>{{ currentUser?.email }}</p>
+          </div>
+          <div class="info-item">
+            <label>Rôle</label>
+            <p>{{ currentUser?.role }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mode édition -->
+      <div class="info-content" *ngIf="isEditing">
+        <div class="info-group">
+          <div class="info-item">
+            <label>Nom</label>
+            <input 
+              type="text" 
+              [(ngModel)]="editedUser.nom" 
+              name="nom" 
+              placeholder="Votre nom"
+            >
+          </div>
+          <div class="info-item">
+            <label>Prénom</label>
+            <input 
+              type="text" 
+              [(ngModel)]="editedUser.prenom" 
+              name="prenom" 
+              placeholder="Votre prénom"
+            >
+          </div>
+        </div>
+        <div class="info-group">
+          <div class="info-item">
+            <label>Email</label>
+            <input 
+              type="email" 
+              [(ngModel)]="editedUser.email" 
+              name="email" 
+              placeholder="Votre email"
+            >
+          </div>
+        </div>
+        <div class="button-group">
+          <button class="cancel-button" (click)="onCancel()">
+            <i class="fas fa-times"></i>
+            Ann efficacer
+          </button>
+          <button class="save-button" (click)="onSave()">
+            <i class="fas fa-check"></i>
+            Enregistrer
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

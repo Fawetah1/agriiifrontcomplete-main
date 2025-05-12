@@ -1,0 +1,52 @@
+#map {
+    width: 100%;
+    height: 100vh;
+}
+
+.leaflet-routing-container {
+    font-family: Arial, sans-serif;
+    z-index: 1000;
+}
+
+.leaflet-routing-geocoders input {
+    padding: 4px;
+    font-size: 14px;
+}
+
+.leaflet-routing-add-waypoint {
+    display: none;
+}
+
+:host ::ng-deep .leaflet-routing-container {
+    display: none !important;
+}
+
+.distance-info {
+    position: absolute;
+    bottom: 30px;
+    right: 30px;
+    background-color: #ffffff;
+    padding: 12px 18px;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 14px;
+    z-index: 1500;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.distance-info p {
+    margin: 4px 0;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

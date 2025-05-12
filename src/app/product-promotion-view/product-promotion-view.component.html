@@ -1,0 +1,42 @@
+<div class="promotion-view-container">
+  <h2>Produits en Promotion</h2>
+
+  <div *ngIf="isLoading" class="loading">Chargement des promotions...</div>
+  <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+
+  <div *ngIf="!isLoading && promotions.length === 0" class="no-promotions">
+    Aucune promotion active pour le moment.
+  </div>
+
+  <div class="promotions-grid">
+    <div *ngFor="let promotion of promotions" class="promotion-card">
+      <h3>{{ promotion.nom }}</h3>
+      <p>Valide jusqu'au {{ promotion.dateFin | date: 'dd/MM/yyyy' }}</p>
+      <div class="products-grid">
+        <div *ngFor="let product of promotion.produits" class="product-card">
+          <img
+            *ngIf="product.image"
+            [src]="product.image"
+            [alt]="product.nom"
+            class="product-image"
+            (error)="handleImageError($event)"
+          />
+          <div class="product-details">
+            <h4>{{ product.nom }}</h4>
+            <p class="original-price">Prix initial : {{ product.prix }} {{ product.devise }}</p>
+            <p class="discounted-price">
+              Prix promo : {{ calculateDiscountedPrice(product.prix, promotion.pourcentageReduction) }} {{ product.devise }}
+            </p>
+            <p class="discount">Réduction : {{ promotion.pourcentageReduction }}%</p>
+            <!-- Buy Button -->
+            <div class="button-area">
+              <button (click)="acheterProduit(product)" class="btn btn-success btn-sm">
+                <i class="bi bi-cart-fill"></i> Acheter
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

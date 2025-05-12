@@ -1,0 +1,51 @@
+<section id="best-selling-products" class="pb-5">
+  <div class="container-lg">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="section-header d-flex flex-wrap justify-content-between my-4">
+          <h2 class="section-title">Products</h2>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        <div class="product-grid row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-3 row-cols-xl-4 row-cols-xxl-5">
+          <div class="col" *ngFor="let product of products">
+            <div class="product-item bg-white shadow rounded p-2">
+              <figure class="mb-2">
+                <a [routerLink]="['/produit-detailsClient', product.id]" [title]="product.nom">
+                  <img [src]="getImageUrl(product.image)"
+                       [alt]="product.nom"
+                       class="tab-image img-fluid w-100"
+                       style="object-fit: contain; height: 200px; background: white;"
+                       (error)="handleImageError($event)" />
+                </a>
+              </figure>
+              <div class="d-flex flex-column text-center">
+                <h3 class="fs-6 fw-normal">{{ product.nom }}</h3>
+                <div>
+                  <span class="price">{{ product.prix }} {{ product.devise || 'XAF' }}</span>
+                </div>
+                <div class="button-area p-3 pt-0">
+                  <div class="row g-1 mt-2">
+                    <div class="col-12 mb-2">
+                      <button [routerLink]="['/produit-detailsClient', product.id]" class="btn btn-info btn-sm w-100">
+                        <i class="bi bi-info-circle"></i> Détails
+                      </button>
+                    </div>
+                    <div class="col-12">
+                      <button (click)="acheterProduit(product)" class="btn btn-success btn-sm w-100">
+                        <i class="bi bi-cart-fill"></i> Acheter
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div> <!-- .product-item -->
+          </div> <!-- .col -->
+        </div> <!-- .product-grid -->
+      </div> <!-- .col-md-12 -->
+    </div> <!-- .row -->
+  </div> <!-- .container-lg -->
+</section>
